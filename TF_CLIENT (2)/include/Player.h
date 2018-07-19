@@ -21,6 +21,8 @@ public:
 	//bool bStop = false;
 	int imove = 0;
 	bool battack = false;
+	int hp = 100;
+	float ETime = 0;
 public: //Get
 	//CCamera*                          GetCamera() const { return(m_pCamera); }
 

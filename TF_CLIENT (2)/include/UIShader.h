@@ -30,6 +30,8 @@ struct UI_INFO
 	XMFLOAT2 xmf2Point;
 	float	 fGravity;
 
+	float time;
+	int hp;
 };
 
 class UIShader

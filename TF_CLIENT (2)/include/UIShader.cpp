@@ -44,7 +44,7 @@ D3D12_SHADER_BYTECODE UIShader::CompileShaderFromFile(WCHAR *pszFileName, LPCSTR
 }
 void UIShader::CreateShader(ID3D12Device *pd3dDevice, UINT nRenderTargets)
 {
-	m_nPipelineStates = 2;
+	m_nPipelineStates = 1;
 	m_ppd3dPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	for (int i = 0; i < m_nPipelineStates; i++)
@@ -191,8 +191,7 @@ D3D12_SHADER_BYTECODE UIShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob, U
 {
 	if(nIndex == MINIMAP_UI)
 		return(CompileShaderFromFile(L"UI.hlsl", "MINIUI_VS", "vs_5_1", ppd3dShaderBlob));
-	else if (nIndex == 1)
-		return(CompileShaderFromFile(L"UI.hlsl", "HPICON_VS", "vs_5_1", ppd3dShaderBlob));
+
 }
 D3D12_SHADER_BYTECODE UIShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
 {
@@ -260,9 +259,8 @@ void UIShader::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice)
 void UIShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	//						°³¼ö
-	m_pTexture = new CTexture(2, RESOURCE_TEXTURE2D, 0);
+	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Assets/UI/Heart.dds", 0);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Assets/UI/Heart.dds", 1);
 
 	CreateSrvDescriptorHeaps(pd3dDevice, m_pTexture->GetTextureCount());
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -590,6 +588,9 @@ void UIShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCame
 	CalculateMiniMap();
 	CalculatePointer();
 
+	m_ui.time += m_pPlayer->ETime;
+	m_ui.hp = m_pPlayer->hp;
+
 	if (m_pd3dGraphicsRootSignature)
 		pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 
@@ -610,9 +611,10 @@ void UIShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCame
 		pd3dCommandList->SetGraphicsRootDescriptorTable(0, m_pTexture->GetArgumentInfos(i).m_d3dSrvGpuDescriptorHandle);
 
 		pd3dCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		if(i == TIME_NUMBER || i == HP_NUMBER)
+		/*if(i == TIME_NUMBER || i == HP_NUMBER)
 			pd3dCommandList->DrawInstanced(18, 1, 0, 0);
 		else
-			pd3dCommandList->DrawInstanced(12, 1, 0, 0);
+			pd3dCommandList->DrawInstanced(12, 1, 0, 0);*/
+		pd3dCommandList->DrawInstanced(12, 1, 0, 0);
 	}
 }

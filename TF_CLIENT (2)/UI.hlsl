@@ -19,6 +19,8 @@ cbuffer UI_INFO : register(b0)
 	float2 xmf2Point;
 	float  fGravity;
 
+	float time;
+	int hp;
 };
 
 VS_UI_OUTPUT MINIMAP_VS(uint nVertexID : SV_VertexID)
@@ -172,48 +174,43 @@ VS_UI_OUTPUT MINIUI_VS(uint nVertexID : SV_VertexID)
 	}
 	else if (nVertexID == 1)
 	{
-		output.position = float4(-0.9f, 1.0f, 0.0f, 1.0f);
+		output.position = float4(/*0*/sin(time * 3.14 / 2), 1.0f, 0.0f, 1.0f);
 		output.uv = float2(1.0f, 0.0f);
 	}
 	else if (nVertexID == 2 || nVertexID == 4)
 	{
-		output.position = float4(-0.9f, 0.9f, 0.0f, 1.0f);
+		output.position = float4(/*-0.0f*/sin(time * -3.14 / 2), 0.9f, 0.0f, 1.0f);
 		output.uv = float2(1.0f, 1.0f);
 	}
-	else
+	else if(nVertexID == 5)
 	{
 		output.position = float4(-1.0f, 0.9f, 0.0f, 1.0f);
 		output.uv = float2(0.0f, 1.0f);
 	}
 
+	if (nVertexID == 6 || nVertexID == 9)
+	{
+		output.position = float4(-1.0f, 0.98f, 0.0f, 1.0f);
+		output.uv = float2(0.0f, 0.2f);
+	}
+	else if (nVertexID == 7)
+	{
+		output.position = float4(/*0.0f*/sin(time * 3.14 / 2), 0.98f, 0.0f, 1.0f);
+		output.uv = float2(1.0f, 0.2f);
+	}
+	else if (nVertexID == 8 || nVertexID == 10)
+	{
+		output.position = float4(/*0.0f*/sin(time * -3.14 / 2), 0.92f, 0.0f, 1.0f);
+		output.uv = float2(1.0f, 0.8f);
+	}
+	else if (nVertexID == 11)
+	{
+		output.position = float4(-1.0f, 0.92f, 0.0f, 1.0f);
+		output.uv = float2(0.0f, 0.8f);
+	}
 	return output;
 }
-VS_UI_OUTPUT HPICON_VS(uint nVertexID : SV_VertexID)
-{
-	VS_UI_OUTPUT output;
 
-	if (nVertexID == 0 || nVertexID == 3)
-	{
-		output.position = float4(-0.9f, 1.0f, 0.0f, 1.0f);
-		output.uv = float2(0.0f, -0.0f);
-	}
-	else if (nVertexID == 1)
-	{
-		output.position = float4(-0.8f, 1.0f, 0.0f, 1.0f);
-		output.uv = float2(1.0f, 0.0f);
-	}
-	else if (nVertexID == 2 || nVertexID == 4)
-	{
-		output.position = float4(-0.8f, 0.9f, 0.0f, 1.0f);
-		output.uv = float2(1.0f, 1.0f);
-	}
-	else
-	{
-		output.position = float4(-0.9f, 0.9f, 0.0f, 1.0f);
-		output.uv = float2(0.0f, 1.0f);
-	}
-	return output;
-}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 VS_UI_OUTPUT SCOREBOARD_VS(uint nVertexID : SV_VertexID)
@@ -488,8 +485,9 @@ VS_UI_OUTPUT HP_NUMBER_VS(uint nVertexID : SV_VertexID)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 float4 UIPS(VS_UI_OUTPUT input) : SV_TARGET
 {
+	//input.position.x = sin(input.position.y * time);
 	float4 color = gtxUI.Sample(gWrapSamplerState, input.uv);
-
+	//color = (1, 1, 1, 1);
 	clip(color.a - 0.1f);
 
 	return color;

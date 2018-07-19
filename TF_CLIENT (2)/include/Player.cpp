@@ -119,7 +119,7 @@ void CPlayer::Rotate(float x, float y, float z, DWORD dwDirection)
 void CPlayer::Update(float fTimeElapsed)
 {
 	if (m_pMesh != NULL) UpdateMD5Model(m_pMesh, m_MD5Model, fTimeElapsed * 1, AniNum);
-	
+	ETime = fTimeElapsed;
 
 }
 
