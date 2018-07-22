@@ -8,8 +8,8 @@
 
 enum
 {
-	MINIMAP_UI = 0,
-	ARROW = 1,
+	HPBASE = 0,
+	HPGAUGE = 1,
 	MINIMAP = 2,
 	CROSS = 3,
 	TIME_NUMBER = 4,

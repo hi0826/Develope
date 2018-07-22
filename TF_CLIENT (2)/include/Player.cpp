@@ -310,8 +310,9 @@ void CPlayer::Input(float fTimeElapsed)
 	
 	
 	
-	if (KEYPRESS("Fire"))
+	if (KEYDOWN("Fire"))
 	{
+		hp -= 10;
 		AniNum = 2;
 		battack = true;
 		printf("Fire´©¸§");

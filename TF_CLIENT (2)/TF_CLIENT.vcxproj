@@ -23,7 +23,7 @@
     <ProjectGuid>{E1813790-FCA2-4918-AC52-C9A419FF9CD1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TFCLIENT</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

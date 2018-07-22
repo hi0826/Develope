@@ -44,7 +44,7 @@ D3D12_SHADER_BYTECODE UIShader::CompileShaderFromFile(WCHAR *pszFileName, LPCSTR
 }
 void UIShader::CreateShader(ID3D12Device *pd3dDevice, UINT nRenderTargets)
 {
-	m_nPipelineStates = 1;
+	m_nPipelineStates = 2;
 	m_ppd3dPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
 
 	for (int i = 0; i < m_nPipelineStates; i++)
@@ -189,8 +189,11 @@ void UIShader::CreatePSO(ID3D12Device *pd3dDevice, UINT nRenderTargets, UINT nIn
 }
 D3D12_SHADER_BYTECODE UIShader::CreateVertexShader(ID3DBlob **ppd3dShaderBlob, UINT nIndex)
 {
-	if(nIndex == MINIMAP_UI)
-		return(CompileShaderFromFile(L"UI.hlsl", "MINIUI_VS", "vs_5_1", ppd3dShaderBlob));
+	if(nIndex == HPBASE)
+		return(CompileShaderFromFile(L"UI.hlsl", "HPBASE_VS", "vs_5_1", ppd3dShaderBlob));
+	if(nIndex == HPGAUGE)
+		return(CompileShaderFromFile(L"UI.hlsl", "HPGAUGE_VS", "vs_5_1", ppd3dShaderBlob));
+	
 
 }
 D3D12_SHADER_BYTECODE UIShader::CreatePixelShader(ID3DBlob **ppd3dShaderBlob)
@@ -259,8 +262,9 @@ void UIShader::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice)
 void UIShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	//						°³¼ö
-	m_pTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Assets/UI/Heart.dds", 0);
+	m_pTexture = new CTexture(2, RESOURCE_TEXTURE2D, 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Assets/UI/HeartBase.dds", 0);
+	m_pTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Assets/UI/HeartGauge.dds", 1);
 
 	CreateSrvDescriptorHeaps(pd3dDevice, m_pTexture->GetTextureCount());
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -603,7 +607,7 @@ void UIShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCame
 
 	UpdateShaderVariables(pd3dCommandList);
 
-	for (int i = m_nPipelineStates - 1; i >= 0; i--)
+	for (int i = 0; i < m_nPipelineStates; i++)
 	{
 		if (m_ppd3dPipelineStates)
 			pd3dCommandList->SetPipelineState(m_ppd3dPipelineStates[i]);
