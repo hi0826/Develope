@@ -8,9 +8,9 @@
 
 enum
 {
-	HPBASE = 0,
+	HPOUT = 0,
 	HPGAUGE = 1,
-	MINIMAP = 2,
+	HPHEART = 2,
 	CROSS = 3,
 	TIME_NUMBER = 4,
 	SCOREBOARD = 5,
