@@ -163,51 +163,32 @@ VS_UI_OUTPUT CROSS_VS(uint nVertexID : SV_VertexID)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//-0.5f - ((1 - (hp * 0.01)) / 2)
 VS_UI_OUTPUT HPGAUGE_VS(uint nVertexID : SV_VertexID)
 {
 	VS_UI_OUTPUT output;
 
 	if (nVertexID == 0 || nVertexID == 3)
 	{
-		output.position = float4(-1.0f, 1.0f, 0.0f, 1.0f);
+		output.position = float4(-0.9f, 0.95f, 0.0f, 1.0f);
 		output.uv = float2(0.0f, -0.0f);
 	}
 	else if (nVertexID == 1)
 	{
-		output.position = float4((hp * 0.01) - 1, 1.0f, 0.0f, 1.0f);
-		output.uv = float2((hp * 0.01), 0.0f);
+		output.position = float4(-0.5f - ((1 - (hp * 0.01)) * 0.4), 0.95f, 0.0f, 1.0f);
+		output.uv = float2(1.0f, 0.0f);
 	}
 	else if (nVertexID == 2 || nVertexID == 4)
 	{
-		output.position = float4((hp * 0.01) - 1, 0.9f, 0.0f, 1.0f);
-		output.uv = float2((hp * 0.01), 1.0f);
+		output.position = float4(-0.5f - ((1 - (hp * 0.01)) *0.4), 0.8f, 0.0f, 1.0f);
+		output.uv = float2(1.0f, 1.0f);
 	}
-	else if(nVertexID == 5)
+	else if (nVertexID == 5)
 	{
-		output.position = float4(-1.0f, 0.9f, 0.0f, 1.0f);
+		output.position = float4(-0.9f, 0.8f, 0.0f, 1.0f);
 		output.uv = float2(0.0f, 1.0f);
 	}
 
-	//if (nVertexID == 6 || nVertexID == 9)
-	//{
-	//	output.position = float4(-1.0f, 0.98f, 0.0f, 1.0f);
-	//	output.uv = float2(0.0f, 0.2f);
-	//}
-	//else if (nVertexID == 7)
-	//{
-	//	output.position = float4(/*0.0f*/sin(time * 3.14 / 2), 0.98f, 0.0f, 1.0f);
-	//	output.uv = float2(1.0f, 0.2f);
-	//}
-	//else if (nVertexID == 8 || nVertexID == 10)
-	//{
-	//	output.position = float4(/*0.0f*/sin(time * -3.14 / 2), 0.92f, 0.0f, 1.0f);
-	//	output.uv = float2(1.0f, 0.8f);
-	//}
-	//else if (nVertexID == 11)
-	//{
-	//	output.position = float4(-1.0f, 0.92f, 0.0f, 1.0f);
-	//	output.uv = float2(0.0f, 0.8f);
-	//}
 	return output;
 }
 
@@ -217,45 +198,25 @@ VS_UI_OUTPUT HPBASE_VS(uint nVertexID : SV_VertexID)
 
 	if (nVertexID == 0 || nVertexID == 3)
 	{
-		output.position = float4(-1.0f, 1.0f, 0.0f, 1.0f);
+		output.position = float4(-0.95f, 0.95f, 0.0f, 1.0f);
 		output.uv = float2(0.0f, -0.0f);
 	}
 	else if (nVertexID == 1)
 	{
-		output.position = float4(0/*sin(time * 3.14 / 2)*/, 1.0f, 0.0f, 1.0f);
+		output.position = float4(-0.5f, 0.95f, 0.0f, 1.0f);
 		output.uv = float2(1.0f, 0.0f);
 	}
 	else if (nVertexID == 2 || nVertexID == 4)
 	{
-		output.position = float4(-0.0f/*sin(time * -3.14 / 2)*/, 0.9f, 0.0f, 1.0f);
+		output.position = float4(-0.5f, 0.8f, 0.0f, 1.0f);
 		output.uv = float2(1.0f, 1.0f);
 	}
 	else if (nVertexID == 5)
 	{
-		output.position = float4(-1.0f, 0.9f, 0.0f, 1.0f);
+		output.position = float4(-0.95f, 0.8f, 0.0f, 1.0f);
 		output.uv = float2(0.0f, 1.0f);
 	}
 
-	//if (nVertexID == 6 || nVertexID == 9)
-	//{
-	//	output.position = float4(-1.0f, 0.98f, 0.0f, 1.0f);
-	//	output.uv = float2(0.0f, 0.2f);
-	//}
-	//else if (nVertexID == 7)
-	//{
-	//	output.position = float4(/*0.0f*/sin(time * 3.14 / 2), 0.98f, 0.0f, 1.0f);
-	//	output.uv = float2(1.0f, 0.2f);
-	//}
-	//else if (nVertexID == 8 || nVertexID == 10)
-	//{
-	//	output.position = float4(/*0.0f*/sin(time * -3.14 / 2), 0.92f, 0.0f, 1.0f);
-	//	output.uv = float2(1.0f, 0.8f);
-	//}
-	//else if (nVertexID == 11)
-	//{
-	//	output.position = float4(-1.0f, 0.92f, 0.0f, 1.0f);
-	//	output.uv = float2(0.0f, 0.8f);
-	//}
 	return output;
 }
 
@@ -265,45 +226,25 @@ VS_UI_OUTPUT HPHEART_VS(uint nVertexID : SV_VertexID)
 
 	if (nVertexID == 0 || nVertexID == 3)
 	{
-		output.position = float4(-1.0f, 1.0f, 0.0f, 1.0f);
+		output.position = float4(-0.95f, 0.95f, 0.0f, 1.0f);
 		output.uv = float2(0.0f, -0.0f);
 	}
 	else if (nVertexID == 1)
 	{
-		output.position = float4(0/*sin(time * 3.14 / 2)*/, 1.0f, 0.0f, 1.0f);
+		output.position = float4(-0.5f, 0.95f, 0.0f, 1.0f);
 		output.uv = float2(1.0f, 0.0f);
 	}
 	else if (nVertexID == 2 || nVertexID == 4)
 	{
-		output.position = float4(-0.0f/*sin(time * -3.14 / 2)*/, 0.9f, 0.0f, 1.0f);
+		output.position = float4(-0.5f, 0.8f, 0.0f, 1.0f);
 		output.uv = float2(1.0f, 1.0f);
 	}
 	else if (nVertexID == 5)
 	{
-		output.position = float4(-1.0f, 0.9f, 0.0f, 1.0f);
+		output.position = float4(-0.95f, 0.8f, 0.0f, 1.0f);
 		output.uv = float2(0.0f, 1.0f);
 	}
 
-	//if (nVertexID == 6 || nVertexID == 9)
-	//{
-	//	output.position = float4(-1.0f, 0.98f, 0.0f, 1.0f);
-	//	output.uv = float2(0.0f, 0.2f);
-	//}
-	//else if (nVertexID == 7)
-	//{
-	//	output.position = float4(/*0.0f*/sin(time * 3.14 / 2), 0.98f, 0.0f, 1.0f);
-	//	output.uv = float2(1.0f, 0.2f);
-	//}
-	//else if (nVertexID == 8 || nVertexID == 10)
-	//{
-	//	output.position = float4(/*0.0f*/sin(time * -3.14 / 2), 0.92f, 0.0f, 1.0f);
-	//	output.uv = float2(1.0f, 0.8f);
-	//}
-	//else if (nVertexID == 11)
-	//{
-	//	output.position = float4(-1.0f, 0.92f, 0.0f, 1.0f);
-	//	output.uv = float2(0.0f, 0.8f);
-	//}
 	return output;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

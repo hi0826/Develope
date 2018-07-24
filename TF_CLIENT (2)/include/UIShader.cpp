@@ -597,7 +597,7 @@ void UIShader::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCame
 
 	m_ui.time += m_pPlayer->ETime;
 	m_ui.hp = m_pPlayer->hp;
-
+	//m_ui.hp = 90;
 	if (m_pd3dGraphicsRootSignature)
 		pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 

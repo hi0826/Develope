@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "Timer.h"
-#include "Object.h"
+//#include "Timer.h"
+//#include "Object.h"
 #include "Player.h"
 #include "Shader.h"
 #include "md5Loader.h"
