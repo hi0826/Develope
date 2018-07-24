@@ -7,14 +7,13 @@ class DayForestScene :public CScene
 	ProcessorMap        Processor;
 
 private:
-	//CMoveObject * STONEMONS[2];
+	  CMoveObject* STONEMONS[2];
 
 public:
 	DayForestScene();
 	~DayForestScene();
 
 public:
-
 	virtual void ProcessInput(float fDeltaTime);
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera = NULL);
 	virtual void Update(float fDeltaTime);
@@ -27,7 +26,6 @@ public:
 public:
 	void BuildLightsAndMaterials();
 	
-
 public:
 	void PutNPC(char* packet);
 	void MoveNPC(char* packet);

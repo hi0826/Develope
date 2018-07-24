@@ -22,16 +22,17 @@ DayForestScene::DayForestScene()
 
 DayForestScene::~DayForestScene()
 {
-	if (m_UiShader)
-		m_UiShader->ReleaseObjects();
-
-	if (m_UiShader)
-		delete m_UiShader;
+	//if (m_UiShader)
+	//	m_UiShader->ReleaseObjects();
+	//
+	//if (m_UiShader)
+	//	delete m_UiShader;
 }
 
 void DayForestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
+
 	XMFLOAT3 xmf3Scale(1.0f, 1.0f, 1.0f);
 	XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
 
@@ -48,17 +49,18 @@ void DayForestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 			m_pPlayerVector[i]->SetActive(false);
 		}
 	}
+
 	if (!m_pPlayer) {
 		m_pPlayer = new CWarrior(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, 1);
 		m_pPlayer->SetActive(false);
 	}
 
-	//for (int i = 0; i < 2; ++i) {
-	//	STONEMONS[i] = new CStoneMon(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, 1);
-	//	STONEMONS[i]->SetWPosition(10.f*i, 0.f, 0.f);
-	//	STONEMONS[i]->Rotate(DIR_BACKWARD);
-	//	STONEMONS[i]->SetAnimState(MOVESTATE);
-	//}
+	for (int i = 0; i < 2; ++i) {
+		STONEMONS[i] = new CStoneMon(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, 1);
+		STONEMONS[i]->SetWPosition(10.f*i, 0.f, 0.f);
+		STONEMONS[i]->Rotate(DIR_BACKWARD);
+		STONEMONS[i]->SetAnimState(IDLESTATE);
+	}
 
 	BuildLightsAndMaterials();
 
@@ -69,10 +71,10 @@ void DayForestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 	m_pCamera->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
 	m_pCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 
-	m_UiShader = new UIShader(m_pPlayer);
-	m_UiShader->CreateGraphicsRootSignature(pd3dDevice);
-	m_UiShader->CreateShader(pd3dDevice, 1);
-	m_UiShader->BuildObjects(pd3dDevice, pd3dCommandList);
+	//m_UiShader = new UIShader(m_pPlayer);
+	//m_UiShader->CreateGraphicsRootSignature(pd3dDevice);
+	//m_UiShader->CreateShader(pd3dDevice, 1);
+	//m_UiShader->BuildObjects(pd3dDevice, pd3dCommandList);
 
 	CreateShaderVariables(pd3dDevice, pd3dCommandList);
 }
@@ -84,17 +86,16 @@ void DayForestScene::ProcessInput(float fDeltaTime)
 
 void DayForestScene::Update(float fDeltaTime)
 {
-
+	
 	for (int i = 0; i < MAX_USER; ++i) {
 		if(m_pPlayerVector[i])
 		m_pPlayerVector[i]->Update(fDeltaTime);
 	}
 	if (m_pPlayer) m_pPlayer->Update(fDeltaTime);
 	
-	//for (int i = 0; i < 2; ++i) {
-	//	if(STONEMONS[i])
-	//	STONEMONS[i]->Update(fDeltaTime);
-	//}
+	for (int i = 0; i < 2; ++i) {
+		if(STONEMONS[i]) STONEMONS[i]->Update(fDeltaTime);
+	}
 
 
 	m_pCamera->Update(fDeltaTime);
@@ -110,7 +111,6 @@ void DayForestScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera
 	::memcpy(m_pcbMappedMaterials, m_pMaterials, sizeof(MATERIALS));
 
 
-
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbLightsGpuVirtualAddress = m_pd3dcbLights->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(4, d3dcbLightsGpuVirtualAddress); //Lights
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
@@ -119,18 +119,18 @@ void DayForestScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera
 	m_pTerrain->Render(pd3dCommandList, m_pCamera);
 
 	for (int i = 0; i < MAX_USER; ++i) {
-		if (m_pPlayerVector[i])
-		m_pPlayerVector[i]->Render(pd3dCommandList, m_pCamera);
+		if (m_pPlayerVector[i]) m_pPlayerVector[i]->Render(pd3dCommandList, m_pCamera);
 	}
 
 	if (m_pPlayer) m_pPlayer->Render(pd3dCommandList, m_pCamera);
 
-	m_UiShader->Render(pd3dCommandList, m_pCamera);
-	/*for (int i = 0; i < 2; ++i) {
-		if (STONEMONS[i])
-			STONEMONS[i]->Render(pd3dCommandList, m_pCamera);
+	//if(m_UiShader)
+	//	m_UiShader->Render(pd3dCommandList, m_pCamera);
+
+	for (int i = 0; i < 2; ++i) {
+		if (STONEMONS[i]) STONEMONS[i]->Render(pd3dCommandList, m_pCamera);
 	}
-*/
+
 }
 
 bool DayForestScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
@@ -147,11 +147,10 @@ void DayForestScene::ReleaseUploadBuffers()
 {
 	m_pPlayer->ReleaseUploadBuffers();
 
-	//for (int i = 0; i < 2; ++i)
-	//{
-	//	if (STONEMONS[i])
-	//		STONEMONS[i]->ReleaseUploadBuffers();
-	//}
+	for (int i = 0; i < 2; ++i)
+	{
+		if (STONEMONS[i]) STONEMONS[i]->ReleaseUploadBuffers();
+	}
 
 	if (m_pPlayerVector.size() > 0)
 		for (int i = 0; i < MAX_USER; ++i) m_pPlayerVector[i]->ReleaseUploadBuffers();
