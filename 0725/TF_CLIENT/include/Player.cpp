@@ -24,7 +24,7 @@ void CPlayer::Update(float fDeltaTime)
 
 	if (AnimState == MOVESTATE) {
 		Rotate(Direction);
-		xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), GetLook(), fDeltaTime * 10);
+		xmf3Shift = Vector3::Add(XMFLOAT3(0, 0, 0), GetLook(), fDeltaTime * 100);
 		CMoveObject::Move(xmf3Shift);
 	}
 	else if (AnimState == ATTACKSTATE) {

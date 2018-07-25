@@ -771,9 +771,9 @@ int UpdateMD5Model(CMesh*& p_Mesh, Model3D& MD5Model, float deltaTime, int anima
 			}
 
 			MD5Model.subsets[k].positions[t] = tempVert.pos;                // Store the vertices position in the position vector instead of straight into the vertex vector
-			MD5Model.subsets[k].vertices[t].normal = tempVert.normal;        // Store the vertices normal
-
-			XMStoreFloat3(&MD5Model.subsets[k].vertices[t].normal, XMVector3Normalize(XMLoadFloat3(&MD5Model.subsets[k].vertices[t].normal)));
+			//MD5Model.subsets[k].vertices[t].normal = tempVert.normal;        // Store the vertices normal
+			//
+			//XMStoreFloat3(&MD5Model.subsets[k].vertices[t].normal, XMVector3Normalize(XMLoadFloat3(&MD5Model.subsets[k].vertices[t].normal)));
 		}
 
 		// Put the positions into the vertices for this subset

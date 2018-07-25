@@ -463,6 +463,9 @@ CPlaneMap::CPlaneMap(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCo
 	m_nWidth = nWidth;
 	m_nLength = nLength;
 
+	int m_nWidthHalf = m_nWidth / 2;
+	int m_nHeightHalf = m_nLength / 2;
+
 	/*지형 객체는 격자 메쉬들의 배열로 만들 것이다.
 	nBlockWidth, nBlockLength는 격자 메쉬 하나의 가로, 세로 크기이다.
 	cxQuadsPerBlock, czQuadsPerBlock은 격자 메쉬의 가로 방향과 세로 방향 사각형의 개수이다.*/
@@ -491,12 +494,12 @@ CPlaneMap::CPlaneMap(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCo
 		for (int x = 0, xStart = 0; x < m_nWidth; x++) {
 
 			//지형의 일부분을 나타내는 격자 메쉬의 시작 위치(좌표)이다.
-			xStart = x * 20;
-			zStart = z * 20;
+			xStart = (x - m_nWidthHalf )* 20;
+			zStart = (z - m_nHeightHalf) * 20;
 
 			//지형의 일부분을 나타내는 격자 메쉬를 생성하여 지형 메쉬에 저장한다.
 			//pPlaneMapGridMesh = new CPlaneMapGridMesh(pd3dDevice, pd3dCommandList, xStart, zStart, nBlockWidth, nBlockLength, xmf3Scale, xmf4Color);
-			pRectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 20.0, 0.0, 20.0, xStart, 10.0, zStart);
+			pRectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 20.0, 0.0, 20.0, xStart, 0.0, zStart);
 			SetMesh(index, pRectMesh);
 			index++;
 		}
@@ -509,7 +512,7 @@ CPlaneMap::CPlaneMap(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCo
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256의 배수
 
 	CTexturedShader* pTexturedShader = new CTexturedShader();
-	//CTerrainShader *pTerrainShader = new CTerrainShader();
+
 	pTexturedShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	pTexturedShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	pTexturedShader->CreateCbvAndSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 1, 2);

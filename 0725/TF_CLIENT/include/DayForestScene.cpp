@@ -43,6 +43,8 @@ void DayForestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 	SetTreePos();
 
 	m_pMap = new CPlaneMap(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, width, height, 513, 513);
+	int m_nWidthHalf = width / 2;
+	int m_nHeightHalf = height / 2;
 
 	//XMFLOAT3 xmf3Scale(1.0f, 1.0f, 1.0f);
 	//XMFLOAT4 xmf4Color(0.0f, 0.5f, 0.0f, 0.0f);
@@ -61,7 +63,7 @@ void DayForestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 
 	for (int i = 0; i < m_nTrees; ++i) {
 		m_pTrees[i] = new CTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, TreeMesh, TreeModel);
-		m_pTrees[i]->SetWPosition(XMFLOAT3(m_PosTree[i].x * 20, 10, m_PosTree[i].z * 20));
+		m_pTrees[i]->SetWPosition(XMFLOAT3((m_PosTree[i].x) * 20 , 0, (m_PosTree[i].z) * 20));
 		m_pTrees[i]->SetScale(1, 1, 1);
 		m_pTrees[i]->Rotate(0, 0, 0);
 	}
@@ -69,11 +71,13 @@ void DayForestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 	if (m_pPlayerVector.size() == 0) { 
 		for (int i = 0; i < MAX_USER; ++i) {
 			m_pPlayerVector.push_back(new CWarrior(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature,1));
+			m_pPlayerVector[i]->SetWPosition(150.0f, 0, 100.0f);
 			m_pPlayerVector[i]->SetActive(false);
 		}
 	}
 	if (!m_pPlayer) {
 		m_pPlayer = new CWarrior(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, 1);
+		m_pPlayer->SetWPosition(150.0f, 0, 100.0f);
 		m_pPlayer->SetActive(false);
 	}
 
@@ -89,7 +93,7 @@ void DayForestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 
 	m_pCamera = GenerateCamera(THIRD_PERSON_CAMERA, m_pPlayer);
 	m_pCamera->SetTimeLag(0.f);
-	m_pCamera->SetOffset(XMFLOAT3(0.0f, 30.0f, -40.0f));
+	m_pCamera->SetOffset(XMFLOAT3(0.0f, 50.0f, -40.0f));
 	m_pCamera->GenerateProjectionMatrix(1.0f, 5000.0f, ASPECT_RATIO, 60.0f);
 	m_pCamera->SetViewport(0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
 	m_pCamera->CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -328,7 +332,7 @@ void DayForestScene::SetTreePos()
 	for (int y = 0; y < height; ++y) {
 		for (int x = 0; x < width; ++x) {
 			if (map[y][x] == 1)
-				m_PosTree[index++] = XMFLOAT3(x, 10, y);
+				m_PosTree[index++] = XMFLOAT3(x, 0, y);
 		}
 	}
 }
