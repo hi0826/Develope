@@ -36,11 +36,29 @@ void CPlayer::Update(float fDeltaTime)
 	m_pOOBB.Center.z = GetWPosition().z;
 
 	//XMFLOAT3 PlayerLook = GetLook();
-	//Vector3::Add(m_pSwordOOBB.Center, PlayerLook);
+	//Vector3::Add(m_pSwordOOBB.Center, PlayerLook, 1.0f);
 	
-	//m_pSwordOOBB.Center.x = GetWPosition().x;
-	//m_pSwordOOBB.Center.y = GetWPosition().y;
-	//m_pSwordOOBB.Center.z = GetWPosition().z + 3;
+	m_pSwordOOBB.Center.x = GetWPosition().x;
+	m_pSwordOOBB.Center.y = GetWPosition().y;
+	m_pSwordOOBB.Center.z = GetWPosition().z;
+	
+	if (GetLook().z == 1)
+	{
+		m_pSwordOOBB.Center.z = GetWPosition().z + 3;
+	}
+	else if (GetLook().z == -1)
+	{
+		m_pSwordOOBB.Center.z = GetWPosition().z - 3;
+	}
+	else if (GetLook().x == 1)
+	{
+		m_pSwordOOBB.Center.x = GetWPosition().x + 3;
+	}
+	else if (GetLook().x == -1)
+	{
+		m_pSwordOOBB.Center.x = GetWPosition().x - 3;
+	}
+	
 }
 
 
@@ -78,7 +96,7 @@ CWarrior::CWarrior(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dComm
 	m_pOOBB = BoundingOrientedBox(GetWPosition(), XMFLOAT3(3.0, 6.0, 3.0), XMFLOAT4(0, 0, 0, 1));
 	XMFLOAT3 SwordOOBB = GetWPosition();
 	SwordOOBB.z = GetWPosition().z + 3;
-	m_pSwordOOBB = BoundingOrientedBox(GetWPosition(), XMFLOAT3(3.0, 6.0, 3.0), XMFLOAT4(0, 0, 0, 1));
+	m_pSwordOOBB = BoundingOrientedBox(GetWPosition(), XMFLOAT3(3.0, 3.0, 3.0), XMFLOAT4(0, 0, 0, 1));
 }
 
 CWarrior::~CWarrior()

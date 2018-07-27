@@ -149,27 +149,24 @@ void DayForestScene::Update(float fDeltaTime)
 		}
 	}
 	
-	for (int i = 0; i < 2; ++i) {
-		ContainmentType containType = STONEMONS[i]->GetOOBB().Contains(m_pPlayer->GetSwordOOBB());
+	if (m_pPlayer->GetAnimState() == ATTACKSTATE)
+	{
+		for (int i = 0; i < 2; ++i) {
+			ContainmentType containType = STONEMONS[i]->GetOOBB().Contains(m_pPlayer->GetSwordOOBB());
 
-		switch (containType)
-		{
-		case DISJOINT:
-			break;
-		case INTERSECTS:
-			// 1 왼 2 오른 3 위 4 아래 5 산
-			printf("공격");
-			//printf("OOBB\tx: %.2f, y: %.2f, z: %.2f \n", m_pPlayer->m_pOOBB.Center.x, m_pPlayer->m_pOOBB.Center.y, m_pPlayer->m_pOOBB.Center.z);
-			//PlayerLook = m_pPlayer->GetLook();
-			//PlayerLook = Vector3::ScalarProduct(PlayerLook, -1.0);
-			//
-			//PlayerPosition = m_pPlayer->GetWPosition();
-			//xmf3Shift = Vector3::Add(xmf3Shift, PlayerLook, 3.0f);
-			//m_pPlayer->Move(xmf3Shift, true);
-			//PlayerPosition = m_pPlayer->GetWPosition();
-			break;
+			switch (containType)
+			{
+			case DISJOINT:
+				break;
+			case INTERSECTS:
+				// 1 왼 2 오른 3 위 4 아래 5 산
+				printf("공격");
+				STONEMONS[i]->SetAnimState(ATTACKSTATE);	
+				break;
+			}
 		}
 	}
+	
 }
 
 void DayForestScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera * pCamera)
