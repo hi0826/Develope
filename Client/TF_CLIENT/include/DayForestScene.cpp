@@ -60,6 +60,7 @@ void DayForestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 	LoadMD5Model(pd3dDevice, pd3dCommandList, TreeMesh, L"Assets/Model/Trees.md5mesh", TreeModel, shaderResourceViewArray1, texFileNameArray1, 0.15, 0.15, 0.15);
 
 	for (int i = 0; i < m_nTrees; ++i) {
+
 		m_pTrees[i] = new CTree(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, TreeMesh, TreeModel);
 		m_pTrees[i]->SetWPosition(XMFLOAT3(m_PosTree[i].x * 20, 10, m_PosTree[i].z * 20));
 		m_pTrees[i]->SetScale(1, 1, 1);
@@ -75,6 +76,7 @@ void DayForestScene::BuildObjects(ID3D12Device * pd3dDevice, ID3D12GraphicsComma
 	if (!m_pPlayer) {
 		m_pPlayer = new CWarrior(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, 1);
 		m_pPlayer->SetActive(false);
+
 	}
 
 
