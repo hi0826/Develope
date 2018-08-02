@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="02.Object">
+      <UniqueIdentifier>{3c041a9c-52a5-41d1-8a3a-68c49753dfc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.DB">
+      <UniqueIdentifier>{360ebe76-a66d-485d-8902-4ff8a919b607}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Util">
+      <UniqueIdentifier>{5b9c473f-2aed-43b1-b0b5-e6af7cc49de9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Util\01.Lua">
+      <UniqueIdentifier>{3bc21b8e-3ff4-41d4-b5fb-bebe244c8da7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Core">
+      <UniqueIdentifier>{adb837e8-960a-453e-afdd-223eeb41ad6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Object\01.Client">
+      <UniqueIdentifier>{c3516df6-99c3-4e7b-8c49-b32d8d0e275f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Object\02.NPC">
+      <UniqueIdentifier>{7153f7b2-f939-459c-bfff-6f14c0bc0611}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Processor">
+      <UniqueIdentifier>{7ea6bc75-2933-43c5-91a8-256737e4e856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Processor\02.NPCProcessor">
+      <UniqueIdentifier>{b76f3a99-d68a-4192-aa98-984d07414b51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Processor\01.UserProcessor">
+      <UniqueIdentifier>{6a8e0c0b-5c79-4579-8c16-c65ba81dc0b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Util\02.Data">
+      <UniqueIdentifier>{d8ea42a7-a97e-411b-90c7-f30234ade7fb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="include\Object\NPC.cpp">
+      <Filter>02.Object\02.NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="include\ServerMain.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="include\DB\DB.cpp">
+      <Filter>04.DB</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Core.cpp">
+      <Filter>01.Core</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Util\ErrorUtil.cpp">
+      <Filter>05.Util</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Util\MiniDump.cpp">
+      <Filter>05.Util</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Object\User.cpp">
+      <Filter>02.Object\01.Client</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Object\Object.cpp">
+      <Filter>02.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Processor\NPCProcessor.cpp">
+      <Filter>03.Processor\02.NPCProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Processor\UserProcessor.cpp">
+      <Filter>03.Processor\01.UserProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Processor\CProcessor.cpp">
+      <Filter>03.Processor</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\juicy%27\Desktop\TermProjectServer\TermProjectServer\include\Lua\lauxlib.h">
+      <Filter>05.Util\01.Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\juicy%27\Desktop\TermProjectServer\TermProjectServer\include\Lua\lua.h">
+      <Filter>05.Util\01.Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\juicy%27\Desktop\TermProjectServer\TermProjectServer\include\Lua\luaconf.h">
+      <Filter>05.Util\01.Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\juicy%27\Desktop\TermProjectServer\TermProjectServer\include\Lua\lualib.h">
+      <Filter>05.Util\01.Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Object\NPC.h">
+      <Filter>02.Object\02.NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Define.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Include.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\protocol.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Struct.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DB\DB.h">
+      <Filter>04.DB</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core.h">
+      <Filter>01.Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\ErrorUtil.h">
+      <Filter>05.Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\MiniDump.h">
+      <Filter>05.Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\SingleTone.h">
+      <Filter>05.Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Object\User.h">
+      <Filter>02.Object\01.Client</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Object\Object.h">
+      <Filter>02.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Inline.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Processor\SendManager.h">
+      <Filter>03.Processor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Processor\NPCProcessor.h">
+      <Filter>03.Processor\02.NPCProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Processor\UserProcessor.h">
+      <Filter>03.Processor\01.UserProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Processor\CProcessor.h">
+      <Filter>03.Processor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\MapData.h">
+      <Filter>05.Util\02.Data</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
