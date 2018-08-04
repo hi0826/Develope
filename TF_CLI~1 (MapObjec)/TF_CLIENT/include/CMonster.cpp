@@ -15,18 +15,17 @@ CStoneMon::~CStoneMon()
 
 }
 
-bool CStoneMon::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, CMesh* cmesh, Model3D model)
+bool CStoneMon::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
 {
+	CMesh* TempMesh;
 	std::vector<ID3D12Resource*> shaderResourceViewArray1;
 	std::vector<std::wstring> texFileNameArray1; //이거 왜있는겨 아무것도아닌거같은데? 
-	m_MD5Model = model;
-	m_AnimState = IDLESTATE;
-	//LoadMD5Model(pd3dDevice, pd3dCommandList, TempMesh, L"Assets/Model/StonemonMesh.md5mesh", m_MD5Model, shaderResourceViewArray1, texFileNameArray1, 1, 1, 1);
+	LoadMD5Model(pd3dDevice, pd3dCommandList, TempMesh, L"Assets/Model/StonemonMesh.md5mesh", m_MD5Model, shaderResourceViewArray1, texFileNameArray1, 1, 1, 1);
 	LoadMD5Anim(L"Assets/Model/StonemonIdle.md5anim", m_MD5Model);
 	LoadMD5Anim(L"Assets/Model/StonemonWalk.md5anim", m_MD5Model);
 	LoadMD5Anim(L"Assets/Model/StoneMonDamaged.md5anim", m_MD5Model);
 
-	SetMesh(0, cmesh);
+	SetMesh(0, TempMesh);
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	ID3D12Resource *pd3dcbResource = CreateShaderVariables(pd3dDevice, pd3dCommandList);
 	CPlayerShader *pShader = new CPlayerShader();
@@ -35,14 +34,14 @@ bool CStoneMon::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList 
 	CTexture *tex = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/Stonemon.dds"), 0);
 	m_pMaterial->SetTexture(tex);
-	
 	pShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	pShader->CreateCbvAndSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 1, 1);
 	pShader->CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, pd3dcbResource, ncbElementBytes);
 	pShader->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, tex, 5, true);
 	SetCbvGPUDescriptorHandle(pShader->GetGPUCbvDescriptorStartHandle());
 	m_pMaterial->SetShader(pShader);
-	
+	m_OOBB = BoundingOrientedBox(XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(3.f, 3.f, 3.f), XMFLOAT4(0, 0, 0, 1));
+	m_AnimState = IDLESTATE;
 	return true;
 }
 
@@ -60,6 +59,8 @@ void CStoneMon::Update(float fDeltaTime)
 	else if (m_AnimState == ATTACKSTATE) {
 		if ((m_MD5Model.animations[ATTACKSTATE].currAnimTime == 0.f)) m_AnimState = IDLESTATE;
 	}
+
+	m_OOBB.Center = GetWPosition();
 }
 
 CBeatleMon::CBeatleMon()

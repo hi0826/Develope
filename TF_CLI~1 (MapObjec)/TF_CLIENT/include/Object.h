@@ -16,6 +16,12 @@
 
 class CShader;
 
+struct INSTANCEOB
+{
+	CMesh* Mesh;
+	Model3D Model;
+};
+
 struct CB_GAMEOBJECT_INFO
 {
 	XMFLOAT4X4   m_xmf4x4World;

@@ -18,15 +18,23 @@ CPlayer::~CPlayer()
 {
 }
 
-bool CPlayer::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature)
+bool CPlayer::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, INSTANCEOB *tempOB, vector<ModelAnimation> Wani)
 {   
 	CMesh* tempMesh;
+	CMesh* FairyMesh;
 	std::vector<ID3D12Resource*> shaderResourceViewArray1;
 	std::vector<std::wstring> texFileNameArray1; //이거 왜있는겨 아무것도아닌거같은데? 
+	//m_WarriorModel = tempOB[0].Model;
 	LoadMD5Model(pd3dDevice, pd3dCommandList, tempMesh, L"Assets/Model/WarriorMesh.md5mesh", m_MD5Model, shaderResourceViewArray1, texFileNameArray1, 1, 1, 1);
+	//LoadMD5Model(pd3dDevice, pd3dCommandList, tempMesh, L"Assets/Model/Fairy.md5mesh", m_MD5Model, shaderResourceViewArray1, texFileNameArray1, 1, 1, 1);
+	//m_WarriorModel = tempOB[0].Model;
+	//m_WarriorMesh = tempOB[0].Mesh;
 	LoadMD5Anim(L"Assets/Model/WarriorIdle.md5anim", m_MD5Model);
 	LoadMD5Anim(L"Assets/Model/WarriorWalk.md5anim", m_MD5Model);
 	LoadMD5Anim(L"Assets/Model/WarriorAttack.md5anim", m_MD5Model);
+	//Warrior_animations = Wani;
+	//tempMesh = tempOB[0].Mesh;
+	//m_MD5Model.animations = Warrior_animations;
 	SetMesh(0, tempMesh);
 	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255);
 	ID3D12Resource *pd3dcbResource = CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -127,11 +135,13 @@ void CPlayer::Update(float fDeltaTime)
 	
 	if (m_AnimState == MOVESTATE) {
 		Rotate(m_Direction);
-		CMoveObject::Move(Vector3::Add(XMFLOAT3(0, 0, 0), GetLook(), fDeltaTime * 30));
+		CMoveObject::Move(Vector3::Add(XMFLOAT3(0, 0, 0), GetLook(), fDeltaTime * 10));
 	}
 	else if (m_AnimState == ATTACKSTATE) {
 		if ((m_MD5Model.animations[ATTACKSTATE].currAnimTime == 0.f)) m_AnimState = IDLESTATE;
 	}
+
+	m_OOBB.Center = GetWPosition();
 }
 
 

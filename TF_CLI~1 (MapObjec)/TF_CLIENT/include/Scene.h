@@ -41,11 +41,7 @@ struct MATERIALS
 	MATERIAL            m_pReflections[MAX_MATERIALS];
 };
 
-struct INSTANCEOB
-{
-	CMesh* Mesh;
-	Model3D Model;
-};
+
 
 class CCamera;
 class CScene

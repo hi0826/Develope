@@ -4,6 +4,10 @@
 #include "CMonster.h"
 #include "Input.h"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 DayForestScene::DayForestScene()
 {
 	Processor[SC_PUT_PLAYER]          = &CScene::PutPlayer;
@@ -31,6 +35,7 @@ DayForestScene::~DayForestScene()
 
 bool DayForestScene::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {   
+<<<<<<< HEAD
 	m_pMonsters = new CMoveObject*[3];
 	CScene::Initialize(pd3dDevice, pd3dCommandList);
 
@@ -42,6 +47,17 @@ bool DayForestScene::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
     ReadMap();
 
 	CreateStaticObjectFromMapFile(pd3dDevice, pd3dCommandList);
+=======
+	CScene::Initialize(pd3dDevice, pd3dCommandList);
+
+	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Trees3x3_3.MD5MESH", "Tree");
+	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/WarriorMesh.MD5MESH", "Warrior");
+	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/FairyMesh0724.MD5MESH", "Fairy");
+    ReadMap();
+
+	CreateStaticObjectFromMapFile(pd3dDevice, pd3dCommandList);
+	CreateAniProtoType(pd3dDevice, pd3dCommandList, "Warrior");
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 
 	m_pMap = new CPlaneMap(m_MapWidth,m_MapHeight);
 	m_pMap->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
@@ -52,11 +68,24 @@ bool DayForestScene::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	//	m_vMonsters.push_back(i_Monster);
 	//	m_vMonsters[i]->SetActive(false);
 	//}
+<<<<<<< HEAD
 
 	if (m_pPlayerVector.size() == 0) { 
 		for (int i = 0; i < MAX_USER; ++i) {
 			CPlayer* Player = new CPlayer();
 			Player->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+=======
+	
+	if (m_pPlayerVector.size() == 0) { 
+		for (int i = 0; i < MAX_USER; ++i) {
+			CPlayer* Player = new CPlayer();
+			INSTANCEOB tempOB[2];
+			tempOB[0] = FindStaticObProtoType("Warrior");
+			tempOB[1] = FindStaticObProtoType("Fairy");
+			vector<ModelAnimation> Warrior_Ani = FindAniProtoType("Warrior");
+			//vector<ModelAnimation> Warrior_animations = FindAniProtoType("Warrior");
+			Player->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB, Warrior_Ani);
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 			m_pPlayerVector.push_back(Player);
 			m_pPlayerVector[i]->SetActive(false);
 		}
@@ -105,7 +134,66 @@ void DayForestScene::Update(float fDeltaTime)
 	//	}
 	//	}
 	//}
+<<<<<<< HEAD
 
+=======
+	//if (m_pPlayerVector.size() != 0) {
+	//	cout << m_pPlayerVector.size() << endl;
+	//}
+	
+	XMFLOAT3 PlayerPos;
+	XMFLOAT3 PlayerLook;
+	XMFLOAT3 PlayerPosition;
+	XMFLOAT3 xmf3Shift = XMFLOAT3(0.f, 0.f, 0.f);
+	for (int i = 0; i < m_vMonsters.size(); ++i) {
+		//for (int j = 0; j < m_pPlayerVector.size(); ++j)
+		{
+			ContainmentType containType = m_vMonsters[i]->GetOOBB().Contains(m_pPlayerVector[0]->GetOOBB());
+	
+			switch (containType)
+			{
+			case DISJOINT:
+				break;
+			case INTERSECTS:
+				printf("Ãæµ¹");
+	
+				PlayerLook = m_pPlayerVector[0]->GetLook();
+				PlayerPos = Vector3::Normalize(Vector3::Subtract(m_vMonsters[i]->GetWPosition(), m_pPlayerVector[0]->GetWPosition()));
+				
+				if (Vector3::CrossProduct(PlayerPos, m_pPlayerVector[0]->GetLook()).y > 0)
+				{
+					XMFLOAT3 RightVector = m_pPlayerVector[0]->GetRight();
+					RightVector.x = RightVector.x * 3;
+					RightVector.y = RightVector.y * 3;
+					RightVector.z = RightVector.z * 3;
+					PlayerLook = Vector3::Add(m_pPlayerVector[0]->GetLook(), RightVector);
+				
+				}
+				else
+				{
+					XMFLOAT3 RightVector = m_pPlayerVector[0]->GetRight();
+					RightVector.x = RightVector.x * 3;
+					RightVector.y = RightVector.y * 3;
+					RightVector.z = RightVector.z * 3;
+					PlayerLook = Vector3::Subtract(m_pPlayerVector[0]->GetLook(), RightVector);
+				
+				}
+				
+				PlayerLook = Vector3::Normalize(PlayerLook);
+				
+				PlayerPosition = m_pPlayerVector[0]->GetWPosition();
+				
+				
+				xmf3Shift = Vector3::Add(xmf3Shift, PlayerLook, fDeltaTime * 10);
+				m_pPlayerVector[0]->Move(xmf3Shift, true);
+				PlayerPosition = m_pPlayerVector[0]->GetWPosition();
+				break;
+			}
+		
+		}
+	}
+	
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 
 	for (int i = 0; i < MAX_USER; ++i) {
 		if(m_pPlayerVector[i])
@@ -114,7 +202,10 @@ void DayForestScene::Update(float fDeltaTime)
 	for (auto i : m_vMonsters) 
 		i->Update(fDeltaTime);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 	m_pCamera->Update(fDeltaTime);
 	m_pCamera->RegenerateViewMatrix();
 }
@@ -311,6 +402,7 @@ void DayForestScene::CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3
 
 			case READ_DATA::Monster: {
 				CStoneMon* i_Monster = new CStoneMon();
+<<<<<<< HEAD
 				INSTANCEOB tempOB = FindStaticObProtoType("StoneMon");
 				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB.Mesh, tempOB.Model);
 				i_Monster->SetWPosition(x*30.f, 0, y*-30.f);
@@ -318,6 +410,13 @@ void DayForestScene::CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3
 				//m_pMonsters[index++] = i_Monster;
 				m_vMonsters.push_back(i_Monster);
 				//m_vMonsters[index++]->SetActive(true);
+=======
+				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+				i_Monster->SetWPosition(x*30.f, 0, y*-30.f);
+				//i_Monster->SetActive(true);
+				m_vMonsters.push_back(i_Monster);
+				m_vMonsters[index++]->SetActive(true);
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 			}
 			default: break;
 			}
@@ -331,8 +430,11 @@ void DayForestScene::CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3
 			}*/
 		}
 	}
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 }
 
 void DayForestScene::CreateMovableObjectFromMapFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandLIst)
@@ -340,13 +442,36 @@ void DayForestScene::CreateMovableObjectFromMapFile(ID3D12Device * pd3dDevice, I
 
 }
 
+<<<<<<< HEAD
 void DayForestScene::CreateStaticObProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::wstring filePath, const std::string strTag, const XMFLOAT3 scale)
+=======
+void DayForestScene::CreateStaticObProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::wstring filePath, const std::string strTag)
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 {
 	std::vector<ID3D12Resource*> shaderResourceViewArray1;
 	std::vector<std::wstring> texFileNameArray1;
 	INSTANCEOB  TempOBJ;
+<<<<<<< HEAD
 	LoadMD5Model(pd3dDevice, pd3dCommandList, TempOBJ.Mesh, filePath, TempOBJ.Model, shaderResourceViewArray1, texFileNameArray1, scale.x, scale.y, scale.z);
 	m_mProtoType.insert(std::make_pair(strTag, TempOBJ));
+=======
+	LoadMD5Model(pd3dDevice, pd3dCommandList, TempOBJ.Mesh, filePath, TempOBJ.Model, shaderResourceViewArray1, texFileNameArray1, 0.3, 0.3, 0.3);
+	m_mProtoType.insert(std::make_pair(strTag, TempOBJ));	
+}
+
+void DayForestScene::CreateAniProtoType(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const std::string strTag)
+{
+	std::vector<ID3D12Resource*> shaderResourceViewArray1;
+	std::vector<std::wstring> texFileNameArray1;
+	//Model3D m_MD5Model;
+	INSTANCEOB TempOBJ = FindStaticObProtoType("Warrior");
+
+	LoadMD5Anim(L"Assets/Model/WarriorIdle.md5anim", TempOBJ.Model);
+	LoadMD5Anim(L"Assets/Model/WarriorWalk.md5anim", TempOBJ.Model);
+	LoadMD5Anim(L"Assets/Model/WarriorAttack.md5anim", TempOBJ.Model);
+	//std::vector<ModelAnimation> Warrior_animations = m_MD5Model.animations;
+	m_mAniProtoType.insert(std::make_pair(strTag, TempOBJ.Model.animations));
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 }
 
 INSTANCEOB DayForestScene::FindStaticObProtoType(const std::string & strKey)
@@ -356,4 +481,14 @@ INSTANCEOB DayForestScene::FindStaticObProtoType(const std::string & strKey)
 	return Iter->second;
 }
 
+<<<<<<< HEAD
+=======
+vector<ModelAnimation> DayForestScene::FindAniProtoType(const std::string & strKey)
+{
+	auto Iter = m_mAniProtoType.find(strKey);
+	/*if (Iter == m_mProtoType.end()) return NULL;*/
+	return Iter->second;
+}
+
+>>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 
