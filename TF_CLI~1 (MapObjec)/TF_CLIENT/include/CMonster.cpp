@@ -20,7 +20,7 @@ bool CStoneMon::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList 
 	CMesh* TempMesh;
 	std::vector<ID3D12Resource*> shaderResourceViewArray1;
 	std::vector<std::wstring> texFileNameArray1; //이거 왜있는겨 아무것도아닌거같은데? 
-	LoadMD5Model(pd3dDevice, pd3dCommandList, TempMesh, L"Assets/Model/StonemonMesh.md5mesh", m_MD5Model, shaderResourceViewArray1, texFileNameArray1, 1, 1, 1);
+	LoadMD5Model(pd3dDevice, pd3dCommandList, TempMesh, L"Assets/Model/StoneMonMesh_0805.md5mesh", m_MD5Model, shaderResourceViewArray1, texFileNameArray1, 1, 1, 1);
 	LoadMD5Anim(L"Assets/Model/StonemonIdle.md5anim", m_MD5Model);
 	LoadMD5Anim(L"Assets/Model/StonemonWalk.md5anim", m_MD5Model);
 	LoadMD5Anim(L"Assets/Model/StoneMonDamaged.md5anim", m_MD5Model);
@@ -33,6 +33,7 @@ bool CStoneMon::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList 
 	m_pMaterial = new CMaterial();
 	CTexture *tex = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/Stonemon.dds"), 0);
+
 	m_pMaterial->SetTexture(tex);
 	pShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	pShader->CreateCbvAndSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 1, 1);

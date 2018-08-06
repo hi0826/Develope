@@ -8,6 +8,7 @@ protected:
 	WORD                         m_Direction;
 	std::shared_mutex            MM[LOCKNUM];
 	Model3D                      m_MD5Model;
+	
 	unsigned                     hp;
 
 public:

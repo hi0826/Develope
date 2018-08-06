@@ -12,6 +12,7 @@ CTexture::CTexture(int nTextures, UINT nTextureType, int nSamplers)
 	if (m_nTextures > 0)
 	{
 		m_pRootArgumentInfos = new SRVROOTARGUMENTINFO[m_nTextures];
+		m_pRootArgumentInfos2 = new SRVROOTARGUMENTINFO[m_nTextures];
 		m_ppd3dTextureUploadBuffers = new ID3D12Resource*[m_nTextures];
 		m_ppd3dTextures = new ID3D12Resource*[m_nTextures];
 	}
@@ -35,6 +36,13 @@ void CTexture::SetRootArgument(int nIndex, UINT nRootParameterIndex, D3D12_GPU_D
 {
 	m_pRootArgumentInfos[nIndex].m_nRootParameterIndex = nRootParameterIndex;
 	m_pRootArgumentInfos[nIndex].m_d3dSrvGpuDescriptorHandle = d3dSrvGpuDescriptorHandle;
+	//m_pRootArgumentInfos[nIndex].m_d3dCbvGpuDescriptorHandle = d3dSrvGpuDescriptorHandle;
+}
+
+void CTexture::SetRootArgumentCbv(int nIndex, UINT nRootParameterIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGpuDescriptorHandle)
+{
+	m_pRootArgumentInfos2[nIndex].m_nRootParameterIndex = nRootParameterIndex;
+	m_pRootArgumentInfos2[nIndex].m_d3dSrvGpuDescriptorHandle = d3dCbvGpuDescriptorHandle;
 }
 
 void CTexture::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
@@ -45,9 +53,24 @@ void CTexture::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 	}
 	else
 	{
-		for (int i = 0; i < m_nTextures; i++)
+		//for (int i = 0; i < m_nTextures; i++)
 		{
-			pd3dCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[i].m_nRootParameterIndex, m_pRootArgumentInfos[i].m_d3dSrvGpuDescriptorHandle);
+			pd3dCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[0].m_nRootParameterIndex, m_pRootArgumentInfos[0].m_d3dSrvGpuDescriptorHandle);
+		}
+	}
+}
+
+void CTexture::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int c)
+{
+	//if (m_nTextureType == RESOURCE_TEXTURE2D_ARRAY)
+	//{
+	//	pd3dCommandList->SetGraphicsRootDescriptorTable(m_pRootArgumentInfos[0].m_nRootParameterIndex, m_pRootArgumentInfos[0].m_d3dSrvGpuDescriptorHandle);
+	//}
+	//else
+	{
+		//for (int i = 0; i < m_nTextures; i++)
+		{
+			pd3dCommandList->SetGraphicsRootDescriptorTable(5, m_pRootArgumentInfos2[c].m_d3dSrvGpuDescriptorHandle);
 		}
 	}
 }

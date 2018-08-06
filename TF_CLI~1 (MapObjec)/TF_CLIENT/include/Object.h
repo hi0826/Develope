@@ -32,6 +32,7 @@ struct SRVROOTARGUMENTINFO
 {
 	UINT                             m_nRootParameterIndex = 0;
 	D3D12_GPU_DESCRIPTOR_HANDLE      m_d3dSrvGpuDescriptorHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE      m_d3dCbvGpuDescriptorHandle;
 };
 
 class CTexture 
@@ -47,6 +48,8 @@ private:
 	ID3D12Resource**              m_ppd3dTextures = NULL;
 	ID3D12Resource**              m_ppd3dTextureUploadBuffers;
 	SRVROOTARGUMENTINFO*          m_pRootArgumentInfos = NULL;
+
+	SRVROOTARGUMENTINFO*          m_pRootArgumentInfos2 = NULL;
 	D3D12_GPU_DESCRIPTOR_HANDLE*  m_pd3dSamplerGpuDescriptorHandles = NULL;
 
 public:
@@ -56,7 +59,9 @@ public:
 
 public:
 	void SetRootArgument(int nIndex, UINT nRootParameterIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dsrvGpuDescriptorHandle);
+	void SetRootArgumentCbv(int nIndex, UINT nRootParameterIndex, D3D12_GPU_DESCRIPTOR_HANDLE d3dcbvGpuDescriptorHandle);
 	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList, int c);
 	void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, int nIndex);
 	void ReleaseShaderVariables();
 	void LoadTextureFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const wchar_t *pszFileName, UINT nIndex);
@@ -90,6 +95,9 @@ class CGameObject
 {
 protected:
 	D3D12_GPU_DESCRIPTOR_HANDLE   m_d3dCbvGPUDescriptorHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE   m_d3dSrvGpuDescriptorHandle;
+	D3D12_GPU_DESCRIPTOR_HANDLE   m_d3dCbvGPUDescriptorHandles[2];
+
 	ID3D12Resource*               m_pd3dcbGameObject;
 	CB_GAMEOBJECT_INFO*           m_pcbMappedGameObject;
 	bool                          m_bActive; 
@@ -145,7 +153,7 @@ public: //Set
 	void  SetShader(CShader *pShader);
 	
 
-	void  SetCbvGPUDescriptorHandle(D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle) { m_d3dCbvGPUDescriptorHandle = d3dCbvGPUDescriptorHandle; }
+	void  SetCbvGPUDescriptorHandle(D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle) 	{m_d3dCbvGPUDescriptorHandle = d3dCbvGPUDescriptorHandle;}
 	void  SetCbvGPUDescriptorHandlePtr(UINT64 nCbvGPUDescriptorHandlePtr) { m_d3dCbvGPUDescriptorHandle.ptr = nCbvGPUDescriptorHandlePtr; }
 
 public: 
