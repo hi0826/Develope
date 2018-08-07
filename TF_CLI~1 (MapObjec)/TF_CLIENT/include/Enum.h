@@ -8,7 +8,8 @@ enum SCENE_CREATE
 enum  READ_DATA
 {
 	TREE = 1,
-	Monster
+	StoneMonster,
+	BeetleMonster
 };
 
 /*ANIMSTATE*/

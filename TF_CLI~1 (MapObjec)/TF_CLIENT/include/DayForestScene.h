@@ -17,6 +17,9 @@ private:
 	vector<CStaticObj*>     m_StaticObjects;
 	vector<CMoveObject*>    m_vMonsters;
 	std::vector<ModelAnimation> Warrior_animations;
+
+	vector<BoundingOrientedBox> v_MapCollisionBox;
+
 public:
 	DayForestScene();
 	virtual ~DayForestScene();
@@ -35,14 +38,15 @@ public:
 	void BuildLightsAndMaterials();
 	void ReadMap();
 	void CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	void CreateMovableObjectFromMapFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandLIst);
+	//void CreateMovableObjectFromMapFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandLIst);
 
 	void CreateStaticObProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::wstring filePath, const std::string strTag);
 	void CreateAniProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::string strTag);
 	INSTANCEOB FindStaticObProtoType(const std::string& strKey);
 	vector<ModelAnimation> FindAniProtoType(const std::string& strKey);
 
-
+	void MakeMapCollision();
+	void CollisionOnWall();
 public: /*Packet 처리함수*/
 	void PutNPC(char* packet);
 	void MoveNPC(char* packet);

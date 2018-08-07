@@ -367,9 +367,9 @@ bool CPlaneMap::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList 
 	int index = 0;
 	for (int z = 0, zStart = 0; z < m_nLength; z++) {
 		for (int x = 0, xStart = 0; x < m_nWidth; x++) {
-			xStart = (x) * 30;
-			zStart = (z) * -30;
-			pRectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 30.0, 0.0, 30.0, xStart, 0.0, zStart);
+			xStart = (x) * 40 - 100;
+			zStart = (z) * -40 + 100;
+			pRectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 40.0, 0.0, 40.0, xStart, 0.0, zStart);
 			SetMesh(index, pRectMesh);
 			index++;
 		}
