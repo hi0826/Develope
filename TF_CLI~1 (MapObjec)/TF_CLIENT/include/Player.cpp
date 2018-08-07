@@ -27,19 +27,21 @@ bool CPlayer::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 	std::vector<ID3D12Resource*> shaderResourceViewArray2;
 	std::vector<std::wstring> texFileNameArray2; //이거 왜있는겨 아무것도아닌거같은데? 
 	//m_WarriorModel = tempOB[0].Model;
-	LoadMD5Model(pd3dDevice, pd3dCommandList, tempMesh, L"Assets/Model/WarriorMesh.md5mesh", m_Models[0], shaderResourceViewArray1, texFileNameArray1, 1, 1, 1);
+	LoadMD5Model(pd3dDevice, pd3dCommandList, tempMesh, L"Assets/Model/Movable/Player/Warrior/WarriorMesh.md5mesh", m_Models[0], shaderResourceViewArray1, texFileNameArray1, 1, 1, 1);
 	//m_WarriorModel = tempOB[0].Model;
 	//m_WarriorMesh = tempOB[0].Mesh;
-	LoadMD5Anim(L"Assets/Model/WarriorIdle.md5anim", m_Models[0]);
-	LoadMD5Anim(L"Assets/Model/WarriorWalk.md5anim", m_Models[0]);
-	LoadMD5Anim(L"Assets/Model/WarriorAttack.md5anim", m_Models[0]);
+	LoadMD5Anim(L"Assets/Model/Movable/Player/Warrior/WarriorIdle.md5anim", m_Models[0]);
+	LoadMD5Anim(L"Assets/Model/Movable/Player/Warrior/WarriorWalk.md5anim", m_Models[0]);
+	LoadMD5Anim(L"Assets/Model/Movable/Player/Warrior/WarriorAttack.md5anim", m_Models[0]);
 	
-	LoadMD5Model(pd3dDevice, pd3dCommandList, FairyMesh, L"Assets/Model/FairyMesh0724.md5mesh", m_Models[1] , shaderResourceViewArray2, texFileNameArray2, 1, 1, 1);
+	LoadMD5Model(pd3dDevice, pd3dCommandList, FairyMesh, L"Assets/Model/Movable/Player/Fairy/FairyMesh.md5mesh", m_Models[1] , shaderResourceViewArray2, texFileNameArray2, 1, 1, 1);
 
-	LoadMD5Anim(L"Assets/Model/FairyAni_Idle.md5anim", m_Models[1]);
-	LoadMD5Anim(L"Assets/Model/FairyAni_Fly.md5anim", m_Models[1]);
-	LoadMD5Anim(L"Assets/Model/FairyAni_attack.md5anim", m_Models[1]);
-	
+	LoadMD5Anim(L"Assets/Model/Movable/Player/Fairy/FairyIdle.md5anim", m_Models[1]);
+	LoadMD5Anim(L"Assets/Model/Movable/Player/Fairy/FairyFly.md5anim", m_Models[1]);
+	LoadMD5Anim(L"Assets/Model/Movable/Player/Fairy/FairyAttack.md5anim", m_Models[1]);
+	LoadMD5Anim(L"Assets/Model/Movable/Player/Fairy/FairyDamaged.md5anim", m_Models[1]);
+	LoadMD5Anim(L"Assets/Model/Movable/Player/Fairy/FairyDead.md5anim", m_Models[1]);
+
 	//Warrior_animations = Wani;
 	//tempMesh = tempOB[0].Mesh;
 	//m_MD5Model.animations = Warrior_animations;
@@ -50,8 +52,8 @@ bool CPlayer::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * 
 	CPlayerShader *pShader = new CPlayerShader();
 	m_pMaterial = new CMaterial();
 	CTexture *tex = new CTexture(2, RESOURCE_TEXTURE2D, 0); 
-	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/warrior.dds"), 0);
-	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/FairyMap2.dds"), 1);
+	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/Movable/Player/Warrior/warrior.dds"), 0);
+	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/Movable/Player/Fairy/FairyMap.dds"), 1);
 	m_pMaterial->SetTexture(tex);
 	pShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	pShader->CreateCbvAndSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 1, 2);

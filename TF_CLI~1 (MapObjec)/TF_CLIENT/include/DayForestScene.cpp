@@ -34,19 +34,12 @@ bool DayForestScene::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 {   
 	CScene::Initialize(pd3dDevice, pd3dCommandList);
 
-	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Trees3x3_3.MD5MESH", "Tree");
-	//CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/WarriorMesh.MD5MESH", "Warrior");
-	//CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/FairyMesh0724.MD5MESH", "Fairy");
+	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Static/Tree/Trees3x3.MD5MESH", "Tree");
     ReadMap();
 
 	if (m_pPlayerVector.size() == 0) {
 		for (int i = 0; i < MAX_USER; ++i) {
 			CPlayer* Player = new CPlayer(3);
-			//INSTANCEOB tempOB[2];
-			//tempOB[0] = FindStaticObProtoType("Warrior");
-			//tempOB[1] = FindStaticObProtoType("Fairy");
-			//vector<ModelAnimation> Warrior_Ani = FindAniProtoType("Warrior");
-			//vector<ModelAnimation> Warrior_animations = FindAniProtoType("Warrior");
 			Player->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 			m_pPlayerVector.push_back(Player);
 			m_pPlayerVector[i]->SetActive(false);
@@ -54,20 +47,10 @@ bool DayForestScene::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 	}
 
 	CreateStaticObjectFromMapFile(pd3dDevice, pd3dCommandList);
-	//CreateAniProtoType(pd3dDevice, pd3dCommandList, "Warrior");
 
 	m_pMap = new CPlaneMap(m_MapWidth,m_MapHeight);
 	m_pMap->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	MakeMapCollision();
-
-	//for (int i = 0; i < m_vMonsters.capacity(); ++i) {
-	//	CStoneMon* i_Monster = new CStoneMon();
-	//	i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	//	m_vMonsters.push_back(i_Monster);
-	//	m_vMonsters[i]->SetActive(false);
-	//}
-	
-	
 
 	BuildLightsAndMaterials();
 	m_pCamera = GenerateCamera(THIRD_PERSON_CAMERA, m_pPlayer);

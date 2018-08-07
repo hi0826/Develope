@@ -17,7 +17,7 @@ bool CTree::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd
 	CPlayerShader *pShader = new CPlayerShader();
 	m_pMaterial = new CMaterial();
 	CTexture *tex = new CTexture(1, RESOURCE_TEXTURE2D, 0);
-	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/Trees3x3Map_3.dds"), 0);
+	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/Static/Tree/Trees3x3Map.dds"), 0);
 	m_pMaterial->SetTexture(tex);
 	pShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 	pShader->CreateCbvAndSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 1, 1);
