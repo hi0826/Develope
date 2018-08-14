@@ -38,6 +38,8 @@ bool CInput::Initialize(HWND hWnd)
 	AddKey(VK_DOWN, VK_RIGHT, "MRB");
 	AddKey(VK_UP, VK_LEFT, "MLF");
 	AddKey(VK_LEFT, VK_DOWN, "MLB");
+	AddKey(VK_F1, "F1");
+	AddKey(VK_F2, "F2");
 	AddKey("Fire", VK_SPACE);
 	return true;
 }

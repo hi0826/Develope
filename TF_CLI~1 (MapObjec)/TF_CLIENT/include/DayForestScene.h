@@ -8,10 +8,7 @@ class DayForestScene :public CScene
 
 private:
 	std::unordered_map<string,INSTANCEOB> m_mProtoType; 
-<<<<<<< HEAD
-=======
 	std::unordered_map<string, vector<ModelAnimation>> m_mAniProtoType;
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 	int					    m_MapWidth, m_MapHeight;
 	int**				    m_MapFile;
 	CPlaneMap*			    m_pMap;
@@ -19,12 +16,10 @@ private:
 	XMFLOAT3*			    m_PosMonster;
 	vector<CStaticObj*>     m_StaticObjects;
 	vector<CMoveObject*>    m_vMonsters;
-<<<<<<< HEAD
-	CMoveObject**			m_pMonsters;
-
-=======
 	std::vector<ModelAnimation> Warrior_animations;
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
+
+	vector<BoundingOrientedBox> v_MapCollisionBox;
+
 public:
 	DayForestScene();
 	virtual ~DayForestScene();
@@ -43,20 +38,15 @@ public:
 	void BuildLightsAndMaterials();
 	void ReadMap();
 	void CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
-	void CreateMovableObjectFromMapFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandLIst);
+	//void CreateMovableObjectFromMapFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandLIst);
 
-<<<<<<< HEAD
-	void CreateStaticObProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::wstring filePath, const std::string strTag, const XMFLOAT3 scale);
-
-	INSTANCEOB FindStaticObProtoType(const std::string& strKey);
-=======
 	void CreateStaticObProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::wstring filePath, const std::string strTag);
 	void CreateAniProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::string strTag);
 	INSTANCEOB FindStaticObProtoType(const std::string& strKey);
 	vector<ModelAnimation> FindAniProtoType(const std::string& strKey);
 
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
-
+	void MakeMapCollision();
+	void CollisionOnWall();
 public: /*Packet 처리함수*/
 	void PutNPC(char* packet);
 	void MoveNPC(char* packet);

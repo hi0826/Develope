@@ -4,10 +4,7 @@
 #include "CMonster.h"
 #include "Input.h"
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 DayForestScene::DayForestScene()
 {
 	Processor[SC_PUT_PLAYER]          = &CScene::PutPlayer;
@@ -35,61 +32,25 @@ DayForestScene::~DayForestScene()
 
 bool DayForestScene::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {   
-<<<<<<< HEAD
-	m_pMonsters = new CMoveObject*[3];
 	CScene::Initialize(pd3dDevice, pd3dCommandList);
 
-	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Trees3x3_3.MD5MESH", "Tree", XMFLOAT3(0.3, 0.3, 0.3));
-	
-	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/StonemonMesh.md5mesh", "StoneMon", XMFLOAT3(1.0, 1.0, 1.0));
-
-
+	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Static/Tree/Trees3x3.MD5MESH", "Tree");
     ReadMap();
 
-	CreateStaticObjectFromMapFile(pd3dDevice, pd3dCommandList);
-=======
-	CScene::Initialize(pd3dDevice, pd3dCommandList);
-
-	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Trees3x3_3.MD5MESH", "Tree");
-	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/WarriorMesh.MD5MESH", "Warrior");
-	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/FairyMesh0724.MD5MESH", "Fairy");
-    ReadMap();
-
-	CreateStaticObjectFromMapFile(pd3dDevice, pd3dCommandList);
-	CreateAniProtoType(pd3dDevice, pd3dCommandList, "Warrior");
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
-
-	m_pMap = new CPlaneMap(m_MapWidth,m_MapHeight);
-	m_pMap->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-
-	//for (int i = 0; i < m_vMonsters.capacity(); ++i) {
-	//	CStoneMon* i_Monster = new CStoneMon();
-	//	i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-	//	m_vMonsters.push_back(i_Monster);
-	//	m_vMonsters[i]->SetActive(false);
-	//}
-<<<<<<< HEAD
-
-	if (m_pPlayerVector.size() == 0) { 
+	if (m_pPlayerVector.size() == 0) {
 		for (int i = 0; i < MAX_USER; ++i) {
-			CPlayer* Player = new CPlayer();
+			CPlayer* Player = new CPlayer(3);
 			Player->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-=======
-	
-	if (m_pPlayerVector.size() == 0) { 
-		for (int i = 0; i < MAX_USER; ++i) {
-			CPlayer* Player = new CPlayer();
-			INSTANCEOB tempOB[2];
-			tempOB[0] = FindStaticObProtoType("Warrior");
-			tempOB[1] = FindStaticObProtoType("Fairy");
-			vector<ModelAnimation> Warrior_Ani = FindAniProtoType("Warrior");
-			//vector<ModelAnimation> Warrior_animations = FindAniProtoType("Warrior");
-			Player->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB, Warrior_Ani);
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 			m_pPlayerVector.push_back(Player);
 			m_pPlayerVector[i]->SetActive(false);
 		}
 	}
+
+	CreateStaticObjectFromMapFile(pd3dDevice, pd3dCommandList);
+
+	m_pMap = new CPlaneMap(m_MapWidth,m_MapHeight);
+	m_pMap->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+	MakeMapCollision();
 
 	BuildLightsAndMaterials();
 	m_pCamera = GenerateCamera(THIRD_PERSON_CAMERA, m_pPlayer);
@@ -134,9 +95,6 @@ void DayForestScene::Update(float fDeltaTime)
 	//	}
 	//	}
 	//}
-<<<<<<< HEAD
-
-=======
 	//if (m_pPlayerVector.size() != 0) {
 	//	cout << m_pPlayerVector.size() << endl;
 	//}
@@ -175,8 +133,7 @@ void DayForestScene::Update(float fDeltaTime)
 					RightVector.x = RightVector.x * 3;
 					RightVector.y = RightVector.y * 3;
 					RightVector.z = RightVector.z * 3;
-					PlayerLook = Vector3::Subtract(m_pPlayerVector[0]->GetLook(), RightVector);
-				
+					PlayerLook = Vector3::Subtract(m_pPlayerVector[0]->GetLook(), RightVector);			
 				}
 				
 				PlayerLook = Vector3::Normalize(PlayerLook);
@@ -193,7 +150,7 @@ void DayForestScene::Update(float fDeltaTime)
 		}
 	}
 	
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
+	CollisionOnWall();
 
 	for (int i = 0; i < MAX_USER; ++i) {
 		if(m_pPlayerVector[i])
@@ -202,10 +159,6 @@ void DayForestScene::Update(float fDeltaTime)
 	for (auto i : m_vMonsters) 
 		i->Update(fDeltaTime);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 	m_pCamera->Update(fDeltaTime);
 	m_pCamera->RegenerateViewMatrix();
 }
@@ -223,6 +176,10 @@ void DayForestScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera
 	D3D12_GPU_VIRTUAL_ADDRESS d3dcbMaterialsGpuVirtualAddress = m_pd3dcbMaterials->GetGPUVirtualAddress();
 	pd3dCommandList->SetGraphicsRootConstantBufferView(3, d3dcbMaterialsGpuVirtualAddress); //Materials
 	
+	for (int i = 0; i < MAX_USER; ++i) {
+		if (m_pPlayerVector[i])
+			m_pPlayerVector[i]->Render(pd3dCommandList, m_pCamera);
+	}
 	if(m_pMap) m_pMap->Render(pd3dCommandList, m_pCamera);
 	
 	for (auto i : m_StaticObjects)
@@ -231,10 +188,7 @@ void DayForestScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera
 	for (auto i : m_vMonsters)
 		i->Render(pd3dCommandList, m_pCamera);
 
-	for (int i = 0; i < MAX_USER; ++i) {
-		if (m_pPlayerVector[i])
-		m_pPlayerVector[i]->Render(pd3dCommandList, m_pCamera);
-	}
+	
 
 	m_UiShader->Render(pd3dCommandList, m_pCamera);
 }
@@ -365,7 +319,7 @@ void DayForestScene::RemoveNPC(char * packet)
 
 void DayForestScene::ReadMap()
 {
-	ifstream in("Assets/Map/0802.geg");
+	ifstream in("Assets/Map/0804_3.geg");
 
 	if (in.is_open()) {
 		in >> m_MapWidth;
@@ -388,9 +342,9 @@ void DayForestScene::CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3
 	int index = 0;
 	for (int y = 0; y < m_MapHeight; ++y) {
 		for (int x = 0; x < m_MapWidth; ++x) {
-			switch(m_MapFile[y][x])
+			switch (m_MapFile[y][x])
 			{
-			
+
 			case READ_DATA::TREE: {
 				CTree* i_Tree = new CTree();
 				INSTANCEOB tempOB = FindStaticObProtoType("Tree");
@@ -400,61 +354,42 @@ void DayForestScene::CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3
 				break;
 			}
 
-			case READ_DATA::Monster: {
-				CStoneMon* i_Monster = new CStoneMon();
-<<<<<<< HEAD
-				INSTANCEOB tempOB = FindStaticObProtoType("StoneMon");
-				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB.Mesh, tempOB.Model);
-				i_Monster->SetWPosition(x*30.f, 0, y*-30.f);
-				i_Monster->SetActive(true);
-				//m_pMonsters[index++] = i_Monster;
-				m_vMonsters.push_back(i_Monster);
-				//m_vMonsters[index++]->SetActive(true);
-=======
-				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-				i_Monster->SetWPosition(x*30.f, 0, y*-30.f);
-				//i_Monster->SetActive(true);
-				m_vMonsters.push_back(i_Monster);
-				m_vMonsters[index++]->SetActive(true);
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
+			case READ_DATA::StoneMonster: {
+				for (int i = 0; i < 3; ++i) {
+					CStoneMon* i_Monster = new CStoneMon();
+					i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+					i_Monster->SetWPosition(x*30.f - 10 + 10 * i, 0, y*-30.f);
+					//i_Monster->SetActive(true);
+					m_vMonsters.push_back(i_Monster);
+					m_vMonsters[index++]->SetActive(true);
+				}
+				break;
 			}
-			default: break;
+
+			case READ_DATA::BeetleMonster: {
+				for (int i = 0; i < 3; ++i) {
+					CBeatleMon* i_Monster = new CBeatleMon();
+					i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+					i_Monster->SetWPosition(x*30.f - 10 + 10 * i, 0, y*-30.f);
+					//i_Monster->SetActive(true);
+					m_vMonsters.push_back(i_Monster);
+					m_vMonsters[index++]->SetActive(true);
+				}
+				break;
 			}
-		/*	if (m_MapFile[y][x] == READ_DATA::TREE)
-				m_PosTree[index++] = XMFLOAT3(x, 0, y);
-			for (int i = 0; i < m_StaticObjects.capacity(); ++i) {
-				CTree* i_Tree = new CTree();
-				i_Tree->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, TreeMesh);
-				i_Tree->SetWPosition(XMFLOAT3((m_PosTree[i].x) * 20, 0, (m_PosTree[i].z) * -20));
-				m_StaticObjects.push_back(i_Tree);
-			}*/
+
+			default:
+				break;
+			}
 		}
 	}
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 }
 
-void DayForestScene::CreateMovableObjectFromMapFile(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandLIst)
-{
-
-}
-
-<<<<<<< HEAD
-void DayForestScene::CreateStaticObProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::wstring filePath, const std::string strTag, const XMFLOAT3 scale)
-=======
 void DayForestScene::CreateStaticObProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::wstring filePath, const std::string strTag)
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 {
 	std::vector<ID3D12Resource*> shaderResourceViewArray1;
 	std::vector<std::wstring> texFileNameArray1;
 	INSTANCEOB  TempOBJ;
-<<<<<<< HEAD
-	LoadMD5Model(pd3dDevice, pd3dCommandList, TempOBJ.Mesh, filePath, TempOBJ.Model, shaderResourceViewArray1, texFileNameArray1, scale.x, scale.y, scale.z);
-	m_mProtoType.insert(std::make_pair(strTag, TempOBJ));
-=======
 	LoadMD5Model(pd3dDevice, pd3dCommandList, TempOBJ.Mesh, filePath, TempOBJ.Model, shaderResourceViewArray1, texFileNameArray1, 0.3, 0.3, 0.3);
 	m_mProtoType.insert(std::make_pair(strTag, TempOBJ));	
 }
@@ -471,7 +406,6 @@ void DayForestScene::CreateAniProtoType(ID3D12Device * pd3dDevice, ID3D12Graphic
 	LoadMD5Anim(L"Assets/Model/WarriorAttack.md5anim", TempOBJ.Model);
 	//std::vector<ModelAnimation> Warrior_animations = m_MD5Model.animations;
 	m_mAniProtoType.insert(std::make_pair(strTag, TempOBJ.Model.animations));
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
 }
 
 INSTANCEOB DayForestScene::FindStaticObProtoType(const std::string & strKey)
@@ -481,8 +415,6 @@ INSTANCEOB DayForestScene::FindStaticObProtoType(const std::string & strKey)
 	return Iter->second;
 }
 
-<<<<<<< HEAD
-=======
 vector<ModelAnimation> DayForestScene::FindAniProtoType(const std::string & strKey)
 {
 	auto Iter = m_mAniProtoType.find(strKey);
@@ -490,5 +422,74 @@ vector<ModelAnimation> DayForestScene::FindAniProtoType(const std::string & strK
 	return Iter->second;
 }
 
->>>>>>> 1b444bfd5c9d5d477b5c55d7bd8f583a66b25add
+void DayForestScene::MakeMapCollision()
+{
+
+	XMFLOAT3 Points[13][8] = {
+
+		{ XMFLOAT3(45, -20, -45), XMFLOAT3(525, -20, -45), XMFLOAT3(525, -20, -525), XMFLOAT3(45, -20, -525),
+		XMFLOAT3(45, 20, -45), XMFLOAT3(525, 20, -45), XMFLOAT3(525, 20, -525), XMFLOAT3(45, 20, -525) },
+
+
+
+	{ XMFLOAT3(75, -20, -45), XMFLOAT3(105, -20, -45), XMFLOAT3(105, -20, -495), XMFLOAT3(75, -20, -495),
+	XMFLOAT3(75, 20, -45), XMFLOAT3(105, 20, -45), XMFLOAT3(105, 20, -495), XMFLOAT3(75, 20, -495) },
+
+	{ XMFLOAT3(105, -20, -465), XMFLOAT3(435, -20, -465), XMFLOAT3(435, -20, -495), XMFLOAT3(105, -20, -495),
+	XMFLOAT3(105, 20, -465), XMFLOAT3(435, 20, -465), XMFLOAT3(435, 20, -495), XMFLOAT3(105, 20, -495) },
+
+	{ XMFLOAT3(405, -20, -465), XMFLOAT3(435, -20, -465), XMFLOAT3(435, -20, -135), XMFLOAT3(405, -20, -135),
+	XMFLOAT3(405, 20, -465), XMFLOAT3(435, 20, -465), XMFLOAT3(435, 20, -135), XMFLOAT3(405, 20, -135) },
+
+	{ XMFLOAT3(405, -20, -135), XMFLOAT3(405, -20, -165), XMFLOAT3(195, -20, -165), XMFLOAT3(195, -20, -135),
+	XMFLOAT3(405, 20, -135), XMFLOAT3(405, 20, -165), XMFLOAT3(195, 20, -165), XMFLOAT3(195, 20, -135) },
+
+	{ XMFLOAT3(195, -20, -165), XMFLOAT3(225, -20, -165), XMFLOAT3(225, -20, -375), XMFLOAT3(195, -20, -375),
+	XMFLOAT3(195, 20, -165), XMFLOAT3(225, 20, -165), XMFLOAT3(225, 20, -375), XMFLOAT3(195, 20, -375) },
+
+	{ XMFLOAT3(225, -20, -375), XMFLOAT3(225, -20, -315), XMFLOAT3(315, -20, -315), XMFLOAT3(315, -20, -375),
+	XMFLOAT3(225, 20, -375), XMFLOAT3(225, 20, -315), XMFLOAT3(315, 20, -315), XMFLOAT3(315, 20, -375) },
+
+
+
+	{ XMFLOAT3(495, -20, -525), XMFLOAT3(495, -20, -75), XMFLOAT3(465, -20, -75), XMFLOAT3(465, -20, -525),
+	XMFLOAT3(495, 20, -525), XMFLOAT3(495, 20, -75), XMFLOAT3(465, 20, -75), XMFLOAT3(465, 20, -525) },
+
+	{ XMFLOAT3(465, -20, -75), XMFLOAT3(465, -20, -105), XMFLOAT3(135, -20, -105), XMFLOAT3(135, -20, -75),
+	XMFLOAT3(465, 20, -75), XMFLOAT3(465, 20, -105), XMFLOAT3(135, 20, -105), XMFLOAT3(135, 20, -75) },
+
+	{ XMFLOAT3(135, -20, -105), XMFLOAT3(135, -20, -375), XMFLOAT3(165, -20, -375), XMFLOAT3(165, -20, -105),
+	XMFLOAT3(135, 20, -105), XMFLOAT3(135, 20, -375), XMFLOAT3(165, 20, -375), XMFLOAT3(165, 20, -105) },
+
+	{ XMFLOAT3(165, -20, -435), XMFLOAT3(165, -20, -405), XMFLOAT3(375, -20, -405), XMFLOAT3(375, -20, -435),
+	XMFLOAT3(165, 20, -435), XMFLOAT3(165, 20, -405), XMFLOAT3(375, 20, -405), XMFLOAT3(375, 20, -435) },
+
+	{ XMFLOAT3(345, -20, -405), XMFLOAT3(345, -20, -195), XMFLOAT3(375, -20, -195), XMFLOAT3(375, -20, -405),
+	XMFLOAT3(345, 20, -405), XMFLOAT3(345, 20, -195), XMFLOAT3(375, 20, -195), XMFLOAT3(375, 20, -405) },
+
+	{ XMFLOAT3(345, -20, -255), XMFLOAT3(345, -20, -195), XMFLOAT3(255, -20, -195), XMFLOAT3(255, -20, -255),
+	XMFLOAT3(345, 20, -255), XMFLOAT3(345, 20, -195), XMFLOAT3(255, 20, -195), XMFLOAT3(255, 20, -255) }
+	};
+
+	for (int i = 0; i < 13; ++i) {
+		BoundingOrientedBox *tempCollision = new BoundingOrientedBox();
+		BoundingOrientedBox::CreateFromPoints(*tempCollision, 8, Points[i], sizeof(float) * 3);
+		v_MapCollisionBox.push_back(*tempCollision);
+	}
+
+}
+
+void DayForestScene::CollisionOnWall()
+{
+	for (int i = 0; i < v_MapCollisionBox.size(); ++i) {
+		ContainmentType ctype = v_MapCollisionBox[i].Contains(m_pPlayerVector[0]->GetOOBB());
+		switch (ctype) {
+		case INTERSECTS:
+			printf("%d º®\n", i);
+			break;
+		}
+	}
+
+}
+
 

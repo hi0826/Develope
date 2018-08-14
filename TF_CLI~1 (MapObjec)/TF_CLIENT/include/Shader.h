@@ -65,7 +65,16 @@ public:
 	virtual D3D12_INPUT_LAYOUT_DESC CreateInputLayout();
 	virtual D3D12_SHADER_BYTECODE CreateVertexShader(ID3DBlob **ppd3dShaderBlob);
 	virtual D3D12_SHADER_BYTECODE CreatePixelShader(ID3DBlob **ppd3dShaderBlob);
+	virtual void CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature *pd3dGraphicsRootSignature);
+	virtual void UpdateShaderVariable(ID3D12GraphicsCommandList *pd3dCommandList, XMFLOAT4X4 *pxmf4x4World);
+	int								m_nObjects = 0;
+	CGameObject**                   m_ppObjects = 0;
+	ID3D12Resource*                 m_pd3dcbGameObjects = NULL;
+	CB_GAMEOBJECT_INFO*             m_pcbMappedGameObjects = NULL;
+
+
+	CMaterial*                       m_pMaterial = NULL;
 };
 
 class CIlluminatedShader : public CShader
