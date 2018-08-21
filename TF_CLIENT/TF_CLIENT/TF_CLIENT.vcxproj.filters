@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="01.NetWork">
+      <UniqueIdentifier>{3a8c13f5-0773-48d4-b513-df641d3a807a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Core">
+      <UniqueIdentifier>{f5538617-a8af-4884-af4c-d527d25747fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object">
+      <UniqueIdentifier>{d6b091f4-d93f-4951-ad7a-436b359bda22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Shader">
+      <UniqueIdentifier>{0fde8cf8-22ff-4cff-a469-6d808b89eb73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.DirectX">
+      <UniqueIdentifier>{110e17a3-7f44-4230-9d1c-fc52dd384664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Scene">
+      <UniqueIdentifier>{46f44326-780f-4e69-a5aa-b794403e980b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07.Input">
+      <UniqueIdentifier>{d66bba81-5da7-482a-8f00-414e329908d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object\01.Obejct">
+      <UniqueIdentifier>{748ad614-49c0-4e08-8589-065ea465a13f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object\04.Camera">
+      <UniqueIdentifier>{ae402abe-1091-4ce2-b8b9-4151747ae465}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object\02.Static">
+      <UniqueIdentifier>{6c9f0959-f19f-4372-8d59-a018c2702fec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Object\03.Movable">
+      <UniqueIdentifier>{e26f121d-7990-489b-9a39-3e3e438ad28d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Scene\01.Scene">
+      <UniqueIdentifier>{6c152aa4-14eb-4d02-b7b0-4f52c4e78bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Scene\02.DayForestScene">
+      <UniqueIdentifier>{26deec07-5d6e-4f9d-abbf-c74dd97c9d42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08.Util">
+      <UniqueIdentifier>{8993f126-a1fb-4088-8563-02638cd66c50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.NetWork\01.Manager">
+      <UniqueIdentifier>{94f57a10-37ef-492e-bbd6-9a52b577f627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.NetWork\03.Util">
+      <UniqueIdentifier>{14bfdab1-e1ff-47b0-a1dc-a7eb1cfd7ec7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.NetWork\02.Protocol">
+      <UniqueIdentifier>{996edc3f-116a-420d-8116-67606d3ca437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Scene\03.MapData">
+      <UniqueIdentifier>{6c3a5d01-b5a3-4330-bf9c-0ace39f5eb20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06.Scene\00.StartScene">
+      <UniqueIdentifier>{059119f2-281e-4000-891a-fb770f33668e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="include\TF_CLIENT.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="include\StaticObj.cpp">
+      <Filter>03.Object\02.Static</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Input.cpp">
+      <Filter>07.Input</Filter>
+    </ClCompile>
+    <ClCompile Include="include\DDSTextureLoader.cpp">
+      <Filter>05.DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="include\DDSTextureLoader12.cpp">
+      <Filter>05.DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="include\md5Loader.cpp">
+      <Filter>05.DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Shader.cpp">
+      <Filter>04.Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="include\GameFramework.cpp">
+      <Filter>02.Core</Filter>
+    </ClCompile>
+    <ClCompile Include="include\MoveObj.cpp">
+      <Filter>03.Object\03.Movable</Filter>
+    </ClCompile>
+    <ClCompile Include="include\stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="include\SceneManager.cpp">
+      <Filter>06.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Player.cpp">
+      <Filter>03.Object\03.Movable</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Object.cpp">
+      <Filter>03.Object\01.Obejct</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Mesh.cpp">
+      <Filter>03.Object\01.Obejct</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Camera.cpp">
+      <Filter>03.Object\04.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Scene.cpp">
+      <Filter>06.Scene\01.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="include\DayForestScene.cpp">
+      <Filter>06.Scene\02.DayForestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Timer.cpp">
+      <Filter>08.Util</Filter>
+    </ClCompile>
+    <ClCompile Include="include\CMonster.cpp">
+      <Filter>03.Object\03.Movable</Filter>
+    </ClCompile>
+    <ClCompile Include="include\NetWork\ErrorUtil.cpp">
+      <Filter>01.NetWork\03.Util</Filter>
+    </ClCompile>
+    <ClCompile Include="include\NetWork\NetWorkManager.cpp">
+      <Filter>01.NetWork\01.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="include\UIShader.cpp">
+      <Filter>04.Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="include\CMapData.cpp">
+      <Filter>06.Scene\03.MapData</Filter>
+    </ClCompile>
+    <ClCompile Include="include\StartScene.cpp">
+      <Filter>06.Scene\00.StartScene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\StaticObj.h">
+      <Filter>03.Object\02.Static</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Define.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enum.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inline.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SingleTone.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Struct.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input.h">
+      <Filter>07.Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DDSTextureLoader.h">
+      <Filter>05.DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DDSTextureLoader12.h">
+      <Filter>05.DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3dUtil.h">
+      <Filter>05.DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\d3dx12.h">
+      <Filter>05.DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MathHelper.h">
+      <Filter>05.DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\md5Loader.h">
+      <Filter>05.DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UploadBuffer.h">
+      <Filter>05.DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shader.h">
+      <Filter>04.Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameFramework.h">
+      <Filter>02.Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MoveObj.h">
+      <Filter>03.Object\03.Movable</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneManager.h">
+      <Filter>06.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player.h">
+      <Filter>03.Object\03.Movable</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Object.h">
+      <Filter>03.Object\01.Obejct</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mesh.h">
+      <Filter>03.Object\01.Obejct</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera.h">
+      <Filter>03.Object\04.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene.h">
+      <Filter>06.Scene\01.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DayForestScene.h">
+      <Filter>06.Scene\02.DayForestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Timer.h">
+      <Filter>08.Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CMonster.h">
+      <Filter>03.Object\03.Movable</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NetWork\ErrorUtil.h">
+      <Filter>01.NetWork\03.Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NetWork\NetWorkManager.h">
+      <Filter>01.NetWork\01.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Protocol.h">
+      <Filter>01.NetWork\02.Protocol</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UIShader.h">
+      <Filter>04.Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CMapData.h">
+      <Filter>06.Scene\03.MapData</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StartScene.h">
+      <Filter>06.Scene\00.StartScene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sound.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Light.hlsl" />
+    <None Include="Shaders.hlsl" />
+    <None Include="UI.hlsl" />
+  </ItemGroup>
+</Project>
