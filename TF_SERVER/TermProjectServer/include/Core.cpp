@@ -35,8 +35,8 @@ void CCore::Initialize()
 	/*Bind & Listen*/
 
 	InitNetwork();
-	if(!CVData::GET_SINGLE()->Initialize()) std::cout << "VData Read failed!\n" << std::endl;
-	if (!CMapData::GET_SINGLE()->Initialize())std::cout << "MapData Read failed!\n" << std::endl;
+	if (!CVData::GET()->Initialize()) std::cout << "VData Read failed!\n" << std::endl;
+	if (!CMapData::GET()->Initialize())std::cout << "MapData Read failed!\n" << std::endl;
 	if (!UP.Initialize()) std::cout << "Processor Initialize Failed..." << std::endl;
 	if (!NP.Initialize()) std::cout << "NPC Manager Initialize Failed..." << std::endl;
 }
@@ -51,9 +51,9 @@ void CCore::Run()
 	std::cout << "WORKER THREAD  VECTOR SIZE:: ";
 	std::cin >> WorkerSize;
 
-	AcceptThread     = CreateAcceptThread();
+	AcceptThread = CreateAcceptThread();
 	for (int i = 0; i < WorkerSize; ++i) WorkerThread.push_back(CreateWorkerThread());
-	EventThread      = CreateEventThread();
+	EventThread = CreateEventThread();
 	SimulationThread = CreateSimulationThread();
 
 	for (auto& th : WorkerThread) th.join();
@@ -67,7 +67,7 @@ void CCore::Close()
 
 	NP.Close();
 	UP.Close();
-	CMapData::GET_SINGLE()->Close();
+	CMapData::GET()->Close();
 	closesocket(ListenSock);
 	CloseHandle(HIOCP);
 	WSACleanup();
@@ -133,17 +133,19 @@ void CCore::CoreWorkerThread()
 			UP.Process(Key, static_cast<int>(IO_Size), Exover->IO_Buf);
 			break;
 		}
-		case IO_TYPE::IO_SEND: 
+		case IO_TYPE::IO_SEND:
 		{
 			delete Exover;
 			break;
 		}
-		case IO_TYPE::IO_EVENT: 
-		{    
-			if (NP.IsNPC(Key)) { 
-				NP.Process(Exover->EV_Type, Key); }
+		case IO_TYPE::IO_EVENT:
+		{
+			if (NP.IsNPC(Key)) {
+				NP.Process(Exover->EV_Type, Key);
+			}
 			else {
-				UP.EventProcess(Exover->EV_Type, Key); }
+				UP.EventProcess(Exover->EV_Type, Key);
+			}
 			delete Exover;
 			break;
 		}
@@ -154,28 +156,28 @@ void CCore::CoreWorkerThread()
 void CCore::CoreEventThread()
 {
 	printf("Start Event Thread\n");
+	NPC_EVENT E;
 	while (true)
 	{
 		Sleep(10);
+
 		while (false == NP.IsQueueEmpty())
-		{ 
-			if (NP.TopOfQueue().W_Time > chrono::high_resolution_clock::now()) break;
-			NPC_EVENT E = NP.TopOfQueue();
-			NP.Pop();
-			EXOVER* Ex = new EXOVER;
-			Ex->EV_Type = E.Type;
-			Ex->IO_Type = IO_TYPE::IO_EVENT;
-			PostQueuedCompletionStatus(HIOCP, 1, E.NPC_ID, &Ex->WSAOVER);
+		{
+			if (NP.TryPopOfQueue(E)) 
+			{   
+				while (E.W_Time >= chrono::high_resolution_clock::now());
+				EXOVER* Ex = new EXOVER;
+				Ex->EV_Type = E.Type;
+				Ex->IO_Type = IO_TYPE::IO_EVENT;
+				PostQueuedCompletionStatus(HIOCP, 1, E.NPC_ID, &Ex->WSAOVER);
+			}
 		}
 	}
 }
 
 void CCore::CoreSimulationThread()
-{   
+{
 	printf("Start Simulation Thread\n");
-	while (true)
-	{
-		UP.SimulationObejcts();
-	}
+	NP.SimulationNPC();
 }
 

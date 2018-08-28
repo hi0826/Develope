@@ -19,9 +19,8 @@ void CObject::Close()
 
 bool CObject::CheckCollision( BoundingOrientedBox& other)
 {   
-	//ContainmentType Type = GetOOBB()->Contains(other);
-	//if (Type == INTERSECTS  || Type == CONTAINS) {  return true; }
-	// return false;
-	 return GetOOBB()->Intersects(other);
+	ContainmentType Type = GetOOBB()->Contains(other);
+	if (Type == INTERSECTS  || Type == CONTAINS) return true; 
+	 return false;
 }
 

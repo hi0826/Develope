@@ -11,13 +11,13 @@ private:
 	static T* m_pInstance;
 
 public:
-	static T* GET_SINGLE()
+	static T* GET()
 	{
 		if (!m_pInstance) m_pInstance = new T;
 		return m_pInstance;
 	};
 
-	static void DESTROY_SINGLE()
+	static void DESTROY()
 	{
 		if (m_pInstance)
 		{

@@ -137,17 +137,8 @@ struct sc_packet_state_npc
 	BYTE        type;
 	WORD          id;
 	WORD         dir;
+	XMFLOAT3     pos;
 	BYTE       state;
-};
-
-struct sc_packet_calibrate_npc
-{
-	BYTE       size;
-	BYTE       type;
-	WORD         id;
-	WORD        dir;
-	XMFLOAT3    pos;
-	BYTE      State;
 };
 
 struct sc_packet_remove_player

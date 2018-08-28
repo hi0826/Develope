@@ -1,11 +1,15 @@
 #pragma once
 #include "CProcessor.h"
 #include "../Include.h"
-
+#include "../Util/Timer.h"
 class CNPCProcessor :public CProcessor
 {   
 	typedef void(CNPCProcessor::*functionPointer)(WORD);
 	std::unordered_map<char, functionPointer>  Processor;
+
+private:
+	CGameTimer FrameTimer;
+
 public:
 	CNPCProcessor();
 	virtual ~CNPCProcessor() {};
@@ -14,6 +18,8 @@ public:
 	bool Initialize();
 	void Close();
 	void Process(EV_TYPE type, WORD id) { (this->*Processor[type])(id); }
+
+	void SimulationNPC();
 
 public:
 	void  IdleNPC(WORD id);

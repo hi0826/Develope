@@ -5,6 +5,9 @@ class CUserProcessor :public CProcessor
 	typedef void(CUserProcessor::*functionPointer)(WORD, char* packet);
 	std::unordered_map<char, functionPointer>  Processor;
 
+    
+
+
 	typedef void(CUserProcessor::*EventfuntionPointer)(WORD);
 	std::unordered_map<char, EventfuntionPointer>  EventProcessor;
 public:

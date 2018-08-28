@@ -3,6 +3,7 @@
 class CNPC :public CObject
 {
 	static const int  NPCLockNum = 4;
+
 private:
 	bool              IsAwake;
 	MONSTER_TYPE      MType;
@@ -10,6 +11,7 @@ private:
 	WORD              Target;
 	BYTE              Speed;
 	std::shared_mutex NPCLock[NPCLockNum];
+
 public:
 	CNPC();
 	virtual ~CNPC() {};
@@ -34,8 +36,7 @@ public:
 
 public: 
 	void LookAtTarget(const XMFLOAT3& otherpos);
-	void MapCollisionCheck(float fDelatTime);
+	void ColliderCheck();
 	void CollisionMove(BYTE DIR, float fDeltaTime);
-	void Move(const float& fDeltaTime);
 };
 

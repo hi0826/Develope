@@ -18,30 +18,24 @@ class CProcessor
 protected:
 	static std::array<CUser, MAX_USER> CLIENTS;
 	static std::array<CNPC, NUM_OF_NPC - NPC_START> NPCS;
-	static priority_queue<NPC_EVENT, vector<NPC_EVENT>, CTCompare> EventQueue;
-
-protected:
-	std::shared_mutex  EMl;
-	CGameTimer FrameTimer;
+	static tbb::concurrent_priority_queue<NPC_EVENT, CTCompare> EventQueue;
 
 public:
 	CProcessor();
 	virtual ~CProcessor();
 
 public:
-	void  AddEvent(WORD id, EV_TYPE type, high_resolution_clock::time_point time);
-	void  AddUserEvent(WORD id, EV_TYPE type, high_resolution_clock::time_point time);
+	void  AddEvent(WORD id, EV_TYPE type, const high_resolution_clock::time_point& time) { EventQueue.push(NPC_EVENT{ time,type,id }); };
 	bool  IsQueueEmpty() { return EventQueue.empty(); }
-	const NPC_EVENT& TopOfQueue() { std::shared_lock<shared_mutex> lock(EMl); return EventQueue.top(); }
-	void  Pop() { std::unique_lock<shared_mutex> lock(EMl); EventQueue.pop(); }
+	bool  TryPopOfQueue(NPC_EVENT& t) { return EventQueue.try_pop(t); }
 
 public:
-	bool InMySight(const XMFLOAT3& me, const XMFLOAT3& other, BYTE distance);
-	bool IsNPC(WORD id) { return  id >= NPC_START; }
+	bool InMySight(const XMFLOAT3& me, const XMFLOAT3& other, BYTE distance) { return  Vector3::Length(Vector3::Subtract(me, other)) <= distance; };
+	bool IsNPC(WORD id) { return id >= NPC_START; }
 	void AWakeNPC(WORD id);
 
-public:
-	void SimulationObejcts(); // thread 함수 
+	//public:
+	//	void SimulationObejcts(); // thread 함수 
 
 };
 

@@ -32,14 +32,14 @@ public:
 		Packet.size      = sizeof(sc_packet_logsucc);
 		Packet.type      = SC_LOG_SUCC;
 		Packet.id        = to.GetID();
-		Packet.pos       = to.GetPOS();
-		Packet.dir       = to.GetDIR();
-		Packet.state     = to.GetSTATE();
+		Packet.pos       = to.GetPos();
+		Packet.dir       = to.GetDir();
+		Packet.state     = to.GetState();
 		Packet.character = to.GetCurCharacter();
-		Packet.stage     = to.GetSTAGE();
+		Packet.stage     = to.GetStage();
 		Packet.hp        = to.GetHP();
 		Packet.mp        = to.GetMP();
-		Packet.atk       = to.GetATK();
+		Packet.atk       = to.GetAtk();
 		
 		SendPacket(to, &Packet);
 	}
@@ -47,21 +47,18 @@ public:
 	static void PlayerDamageStepPacket(CUser& to)
 	{
 		sc_packet_damagestep_player Packet;
-
 		Packet.size = sizeof(sc_packet_damagestep_player);
 		Packet.type = SC_DAMAGESTEP_PLAYER;
 		Packet.id   = to.GetID();
 		Packet.hp   = to.GetHP();
-	
 		SendPacket(to, &Packet);
 	}
+
 	static void LoginFailPacket(const CUser& to)
 	{
 		sc_packet_Logfail Packet;
-
 		Packet.size = sizeof(sc_packet_Logfail);
 		Packet.type = SC_LOG_FAIL;
-
 		SendPacket(to, &Packet);
 	}
 
@@ -71,9 +68,9 @@ public:
 		Packet.size      = sizeof(sc_packet_put_player);
 		Packet.type      = SC_PUT_PLAYER;
 		Packet.id        = from.GetID();
-		Packet.pos       = from.GetPOS();
-		Packet.dir       = from.GetDIR();
-		Packet.state     = from.GetSTATE();
+		Packet.pos       = from.GetPos();
+		Packet.dir       = from.GetDir();
+		Packet.state     = from.GetState();
 		Packet.character = from.GetCurCharacter();
 
 		SendPacket(to, &Packet);
@@ -86,9 +83,9 @@ public:
 		Packet.type    = SC_PUT_NPC;
 		Packet.id      = from.GetID()-NPC_START;
 		Packet.mtype   = from.GetMType();
-		Packet.pos     = from.GetPOS();
-		Packet.dir     = from.GetDIR();
-		Packet.state   = from.GetSTATE();
+		Packet.pos     = from.GetPos();
+		Packet.dir     = from.GetDir();
+		Packet.state   = from.GetState();
 		SendPacket(to, &Packet);
 		
 	}
@@ -131,9 +128,9 @@ public:
 		Packet.size  = sizeof(sc_packet_move_player);
 		Packet.type  = SC_MOVE_PLAYER;
 		Packet.id    = from.GetID();
-		Packet.pos   = from.GetPOS();
-		Packet.dir   = from.GetDIR();
-		Packet.state = from.GetSTATE();
+		Packet.pos   = from.GetPos();
+		Packet.dir   = from.GetDir();
+		Packet.state = from.GetState();
 		SendPacket(to, &Packet);
 	}
 
@@ -143,20 +140,9 @@ public:
 		Packet.size    = sizeof(sc_packet_state_npc);
 		Packet.type    = SC_STATE_NPC;
 		Packet.id      = from.GetID() - NPC_START;
-		Packet.dir     = from.GetDIR();
-		Packet.state   = from.GetSTATE();
-		SendPacket(to, &Packet);
-	}
-	
-	static void CalibrateNPCPacket(const CUser& to, CNPC& from)
-	{
-		sc_packet_calibrate_npc Packet;
-		Packet.size  = sizeof(sc_packet_calibrate_npc);
-		Packet.type  = SC_CLALI_NPC;
-		Packet.id    = from.GetID() - NPC_START;
-		Packet.pos   = from.GetPOS();
-		Packet.dir   = from.GetDIR();
-		Packet.State = from.GetSTATE();
+		Packet.dir     = from.GetDir();
+		Packet.pos     = from.GetPos();
+		Packet.state   = from.GetState();
 		SendPacket(to, &Packet);
 	}
 
@@ -176,11 +162,9 @@ public:
 		Packet.size = sizeof(sc_packet_collision_player); 
 		Packet.type = SC_COLLISION_PLAYER;
 		Packet.id   = from.GetID();
-		Packet.pos  = from.GetPOS();
-
+		Packet.pos  = from.GetPos();
 		SendPacket(to, &Packet);
 	}
-
 	static void ChangeCharacterPlayerPacket(const CUser& to, CUser& from)
 	{
 		sc_packet_change_character Packet; 
@@ -188,7 +172,6 @@ public:
 		Packet.type = SC_CHAGNE_CHARACTER;
 		Packet.id = from.GetID();
 		Packet.num = from.GetCurCharacter();
-
 		SendPacket(to, &Packet);
 	}
 

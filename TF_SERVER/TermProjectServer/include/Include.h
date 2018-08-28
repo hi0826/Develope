@@ -29,8 +29,10 @@
 #include <DirectXPackedVector.h>
 #include <DirectXColors.h>
 #include <DirectXCollision.h>
+#include <tbb/concurrent_priority_queue.h>
+#include <tbb/cache_aligned_allocator.h>
+#include <tbb/concurrent_vector.h>
 #include <tbb/tbbmalloc_proxy.h>
-
 /*Server Lib*/
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib,"mswsock.lib") 

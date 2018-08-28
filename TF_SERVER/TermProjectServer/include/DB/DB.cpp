@@ -144,8 +144,8 @@ void CDB::SaveUserData(CUser& user)
 {
 	WCHAR EXECORDER[256];
 	wsprintf(EXECORDER, TEXT("EXEC dbo.SaveUserData %S,%d,%d,%d,%f,%f,%f "),
-		user.GetName(),user.GetHP(), user.GetMP(), user.GetATK(),
-		user.GetPOS().x, user.GetPOS().y, user.GetPOS().z);
+		user.GetName(),user.GetHP(), user.GetMP(), user.GetAtk(),
+		user.GetPos().x, user.GetPos().y, user.GetPos().z);
 
 	if (SQLExecDirect(hstmt, (SQLWCHAR*)EXECORDER, SQL_NTS) == SQL_ERROR)
 		HandleDiagnosticRecord(hdbc, SQL_HANDLE_DBC, retcode);

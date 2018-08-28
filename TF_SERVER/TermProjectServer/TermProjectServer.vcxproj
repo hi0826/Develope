@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\juicy%27\Desktop\SenierProject (2)\TF_SERVER\TermProjectServer\include\Util\Timer.cpp" />
     <ClCompile Include="include\Core.cpp" />
     <ClCompile Include="include\DB\DB.cpp" />
     <ClCompile Include="include\Object\User.cpp" />
@@ -32,9 +31,9 @@
     <ClCompile Include="include\Util\Astar.cpp" />
     <ClCompile Include="include\Util\ErrorUtil.cpp" />
     <ClCompile Include="include\Util\MiniDump.cpp" />
+    <ClCompile Include="include\Util\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\juicy%27\Desktop\SenierProject (2)\TF_SERVER\TermProjectServer\include\Util\Timer.h" />
     <ClInclude Include="..\..\..\..\..\juicy%27\Desktop\SenierProject (2)\TF_SERVER\TermProjectServer\include\Util\VectorData.h" />
     <ClInclude Include="include\Core.h" />
     <ClInclude Include="include\DB\DB.h" />
@@ -55,6 +54,7 @@
     <ClInclude Include="include\Util\MapData.h" />
     <ClInclude Include="include\Util\MiniDump.h" />
     <ClInclude Include="include\Util\SingleTone.h" />
+    <ClInclude Include="include\Util\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
