@@ -1,11 +1,10 @@
 #include "CProcessor.h"
-#include "../Util/MapData.h"
 #include "SendManager.h"
-#include "../Util/Timer.h"
-#include "../Util/VectorData.h"
+
 std::array<CUser, MAX_USER> CProcessor::CLIENTS;
 std::array<CNPC, NUM_OF_NPC - NPC_START> CProcessor::NPCS;
-tbb::concurrent_priority_queue<NPC_EVENT, CTCompare> CProcessor::EventQueue;
+tbb::concurrent_priority_queue<NPC_EVENT, CECompare> CProcessor::EventQueue;
+
 CProcessor::CProcessor()
 {
 

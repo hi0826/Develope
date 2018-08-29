@@ -18,6 +18,7 @@ CUserProcessor::CUserProcessor()
 bool CUserProcessor::Initialize()
 {
 	XMFLOAT3  InitPos = XMFLOAT3(60.f, 0.f, -60.f);
+
 	for (int i = 0; i < MAX_USER; ++i)
 	{
 		CLIENTS[i].Initialize();
@@ -37,9 +38,7 @@ bool CUserProcessor::Initialize()
 
 void CUserProcessor::Close()
 {
-	for (int i = 0; i < MAX_USER; ++i) {
-		CLIENTS[i].Close();
-	}
+	for (int i = 0; i < MAX_USER; ++i) CLIENTS[i].Close();
 }
 
 WORD CUserProcessor::GetUsableID()
@@ -59,8 +58,7 @@ void CUserProcessor::UserSetting(WORD id, SOCKET sock)
 
 void CUserProcessor::CallRecv(WORD id)
 {
-	if (id >= 0 && id < MAX_USER)
-		CLIENTS[id].CallRecv();
+	if (id >= 0 && id < MAX_USER) CLIENTS[id].CallRecv();
 }
 
 void CUserProcessor::PlayerInit(WORD id)
@@ -69,7 +67,7 @@ void CUserProcessor::PlayerInit(WORD id)
 	CSendManager::LoginSuccPacket(CLIENTS[id]);
 
 	/* 내주위의 있는 사람에게 패킷*/
-	for (WORD i = 0; i < MAX_USER; ++i) 
+	for (WORD i = 0; i < MAX_USER; ++i)
 	{
 		if (i == id) continue;
 		if (!CLIENTS[i].GetIsConnected()) continue;
@@ -111,7 +109,7 @@ void CUserProcessor::PlayerInit(WORD id)
 
 }
 
-void CUserProcessor::Process(WORD id, int work_size, char * io_ptr)
+void CUserProcessor::PacketProcess(WORD id, int work_size, char * io_ptr)
 {
 	char*Packet = CLIENTS[id].Process(work_size, io_ptr);
 	if (Packet == NULL) return;
@@ -129,11 +127,12 @@ void CUserProcessor::PlayerLogin(WORD id, char* packet)
 	/*Login Check*/
 	for (int i = 0; i < MAX_USER; ++i)
 	{
-		if (id != i)
-			if (!strcmp(CLIENTS[i].GetName(), Str)) {
-				CSendManager::LoginFailPacket(CLIENTS[id]);
-				return;
-			}
+		if (id == i) continue;
+		if (!strcmp(CLIENTS[i].GetName(), Str))
+		{
+			CSendManager::LoginFailPacket(CLIENTS[id]);
+			return;
+		}
 	}
 
 	/*DB Querry*/
@@ -164,7 +163,8 @@ void CUserProcessor::PlayerLogin(WORD id, char* packet)
 }
 
 void CUserProcessor::PlayerMove(WORD id, char * packet)
-{
+{  
+
 	cs_packet_move* Packet = (cs_packet_move*)packet;
 	CLIENTS[id].SetDir(Packet->dir);
 	CLIENTS[id].SetState(Packet->state);
@@ -380,6 +380,7 @@ void CUserProcessor::UpdateViewList(WORD id)
 	CLIENTS[id].VlLock();
 	unordered_set<WORD> OldViewList = CLIENTS[id].VL;
 	CLIENTS[id].VlUnlock();
+
 	for (auto ID : OldViewList)
 	{
 		if (0 == NewViewList.count(ID))
@@ -404,7 +405,7 @@ void CUserProcessor::UpdateViewList(WORD id)
 }
 
 void CUserProcessor::PlayerRespawn(WORD id)
-{  
+{
 	CLIENTS[id].SetHP(500.f);
 	CLIENTS[id].SetMP(500.f);
 	CLIENTS[id].SetIsAlive(true);

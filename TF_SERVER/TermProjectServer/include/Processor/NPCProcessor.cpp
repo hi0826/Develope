@@ -104,7 +104,7 @@ bool CNPCProcessor::Initialize()
 		}
 	}
 
-	
+
 	return true;
 }
 
@@ -118,25 +118,23 @@ void CNPCProcessor::SimulationNPC()
 	FrameTimer.Start();
 	float fDeltaTime;
 	XMFLOAT3 NewPos;
-	/*몬스터 방향이 바뀌었을 경우나 상태전환이 일어났을때만 패킷을 전송*/
 	while (true)
-	{   
-		/*SPF 구하기*/
+	{
 		FrameTimer.Tick(0.f);
-		fDeltaTime = FrameTimer.GetTimeElapsed(); 
+		fDeltaTime = FrameTimer.GetTimeElapsed();
 		for (auto& NPC : NPCS)
 		{
 			if (!NPC.GetIsAlive()) continue;
 			if (!NPC.GetIsAwake()) continue;
 			if (MOVESTATE != NPC.GetState()) continue;
 
-			/*NewPos*/
 			if (NPC.GetTarget() != NONE_TARGET) NPC.LookAtTarget(CLIENTS[NPC.GetTarget()].GetPos());
 
-			NewPos = Vector3::Add(NPC.GetPos(),Vector3::ScalarProduct(Vector3::Normalize(CVData::GET()->LookVectorMap[NPC.GetDir()]),
-					fDeltaTime * NPC.GetSpeed()));
+			NewPos = Vector3::Add(NPC.GetPos(), Vector3::ScalarProduct(Vector3::Normalize(CVData::GET()->LookVectorMap[NPC.GetDir()]),
+				fDeltaTime * NPC.GetSpeed()));
 
 			NPC.SetPos(NewPos);
+		
 		}
 	}
 }
@@ -280,8 +278,8 @@ void CNPCProcessor::BroadCastingNPCState(WORD index)
 	{
 		if (!CL.GetIsConnected()) continue;  // 알지?
 		if (CL.GetStage() != NPCS[index].GetStage()) continue; // 같은 스테이지 내에 있는가?
-		if (!CProcessor::InMySight(NPCS[index].GetPos(), CL.GetPos(), VIEW_RADIUS)) continue; 
-			CSendManager::StateNPCPacket(CL, NPCS[index]);
+		if (!CProcessor::InMySight(NPCS[index].GetPos(), CL.GetPos(), VIEW_RADIUS)) continue;
+		CSendManager::StateNPCPacket(CL, NPCS[index]);
 	}
 }
 

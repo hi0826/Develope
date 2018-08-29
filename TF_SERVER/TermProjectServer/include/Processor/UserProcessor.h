@@ -5,18 +5,16 @@ class CUserProcessor :public CProcessor
 	typedef void(CUserProcessor::*functionPointer)(WORD, char* packet);
 	std::unordered_map<char, functionPointer>  Processor;
 
-    
-
-
 	typedef void(CUserProcessor::*EventfuntionPointer)(WORD);
-	std::unordered_map<char, EventfuntionPointer>  EventProcessor;
+	std::unordered_map<BYTE, EventfuntionPointer>  EventProcessor;
+
 public:
 	CUserProcessor();
 	virtual ~CUserProcessor() {};
 
 public:
     bool Initialize();
-	void Process(WORD id, int work_size, char* io_ptr);
+	void PacketProcess(WORD id, int work_size, char* io_ptr);
 	void EventProcess(EV_TYPE type, WORD id) { (this->*EventProcessor[type])(id); }
 	void Close();
 

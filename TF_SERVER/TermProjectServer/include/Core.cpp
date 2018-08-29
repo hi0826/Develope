@@ -7,34 +7,27 @@
 void CCore::InitNetwork()
 {
 	wcout.imbue(locale("Korean"));
-
-	/*Window Startup*/
 	WSADATA WsaData;
 	WSAStartup(MAKEWORD(2, 2), &WsaData);
 
-	/*Create IOCP HANDLE*/
 	HIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
-
-	/*Create Socket*/
 	ListenSock = WSASocketW(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 
-	/*Bind N Listen*/
 	SOCKADDR_IN BindAddr;
 	ZeroMemory(&BindAddr, sizeof(SOCKADDR_IN));
+
 	BindAddr.sin_family = AF_INET;
 	BindAddr.sin_port = htons(MY_SERVER_PORT);
 	BindAddr.sin_addr.s_addr = INADDR_ANY;
+
 	::bind(ListenSock, reinterpret_cast<sockaddr*>(&BindAddr), sizeof(SOCKADDR));
 	::listen(ListenSock, SOMAXCONN);
 }
 
-
-
 void CCore::Initialize()
 {
-	/*Bind & Listen*/
-
 	InitNetwork();
+
 	if (!CVData::GET()->Initialize()) std::cout << "VData Read failed!\n" << std::endl;
 	if (!CMapData::GET()->Initialize())std::cout << "MapData Read failed!\n" << std::endl;
 	if (!UP.Initialize()) std::cout << "Processor Initialize Failed..." << std::endl;
@@ -48,15 +41,19 @@ void CCore::Run()
 	std::thread EventThread;
 	std::thread SimulationThread;
 
-	std::cout << "WORKER THREAD  VECTOR SIZE:: ";
+	std::cout << "WORKER THREAD  POOL SIZE:: ";
 	std::cin >> WorkerSize;
 
 	AcceptThread = CreateAcceptThread();
-	for (int i = 0; i < WorkerSize; ++i) WorkerThread.push_back(CreateWorkerThread());
+
+	for (int i = 0; i < WorkerSize; ++i)
+		WorkerThread.push_back(CreateWorkerThread());
+
 	EventThread = CreateEventThread();
 	SimulationThread = CreateSimulationThread();
 
 	for (auto& th : WorkerThread) th.join();
+
 	AcceptThread.join();
 	EventThread.join();
 	SimulationThread.join();
@@ -64,10 +61,10 @@ void CCore::Run()
 
 void CCore::Close()
 {
-
 	NP.Close();
 	UP.Close();
 	CMapData::GET()->Close();
+
 	closesocket(ListenSock);
 	CloseHandle(HIOCP);
 	WSACleanup();
@@ -76,6 +73,7 @@ void CCore::Close()
 void CCore::CoreAcceptThread()
 {
 	printf("Start Accept Thread\n");
+
 	while (true)
 	{
 		SOCKADDR_IN CAddr;
@@ -93,23 +91,22 @@ void CCore::CoreAcceptThread()
 			continue;
 		}
 		printf("New Client Connected ID[%d]\n", &NewID);
+
 		UP.UserSetting(NewID, CSock);
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(CSock), HIOCP, NewID, 0);
-		//DB연결시 PlayerLogin으로 대체
 		UP.PlayerInit(NewID);
 		UP.CallRecv(NewID);
-
 	}
 
 }
 
 void CCore::CoreWorkerThread()
 {
-	unsigned long                  IO_Size;
-	unsigned long long             IO_Key;
-	WORD                           Key;
-	bool                           Ret;
-	WSAOVERLAPPED*                 Over;
+	unsigned long       IO_Size;
+	unsigned long long  IO_Key;
+	WORD                Key;
+	bool                Ret;
+	WSAOVERLAPPED*      Over;
 
 	printf("Start Worker Thread\n");
 	while (true)
@@ -124,13 +121,13 @@ void CCore::CoreWorkerThread()
 			continue;
 		}
 
-		/*Send / Recv 처리*/
 		EXOVER* Exover = reinterpret_cast<EXOVER*>(Over);
+
 		switch (Exover->IO_Type)
 		{
 		case IO_TYPE::IO_RECV:
 		{
-			UP.Process(Key, static_cast<int>(IO_Size), Exover->IO_Buf);
+			UP.PacketProcess(Key, static_cast<int>(IO_Size), Exover->IO_Buf);
 			break;
 		}
 		case IO_TYPE::IO_SEND:
@@ -140,12 +137,9 @@ void CCore::CoreWorkerThread()
 		}
 		case IO_TYPE::IO_EVENT:
 		{
-			if (NP.IsNPC(Key)) {
-				NP.Process(Exover->EV_Type, Key);
-			}
-			else {
-				UP.EventProcess(Exover->EV_Type, Key);
-			}
+			if (NP.IsNPC(Key)) NP.EventProcess(Exover->EV_Type, Key);
+			else UP.EventProcess(Exover->EV_Type, Key);
+
 			delete Exover;
 			break;
 		}
@@ -156,16 +150,16 @@ void CCore::CoreWorkerThread()
 void CCore::CoreEventThread()
 {
 	printf("Start Event Thread\n");
+
 	NPC_EVENT E;
 	while (true)
 	{
 		Sleep(10);
-
 		while (false == NP.IsQueueEmpty())
 		{
-			if (NP.TryPopOfQueue(E)) 
-			{   
-				while (E.W_Time >= chrono::high_resolution_clock::now());
+			if (NP.TryPopOfQueue(E))
+			{
+				while (E.W_Time > chrono::high_resolution_clock::now());
 				EXOVER* Ex = new EXOVER;
 				Ex->EV_Type = E.Type;
 				Ex->IO_Type = IO_TYPE::IO_EVENT;

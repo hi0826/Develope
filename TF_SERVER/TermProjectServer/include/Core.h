@@ -9,6 +9,7 @@ private:
 	SOCKET         ListenSock;
 	SOCKADDR_IN    BindAddr;
 	UINT           WorkerSize;
+
 	CNPCProcessor  NP;
 	CUserProcessor UP;
 
