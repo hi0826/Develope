@@ -81,9 +81,6 @@
     <ClCompile Include="include\Util\Astar.cpp">
       <Filter>05.Util\02.Astar</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\juicy%27\Desktop\SenierProject (2)\TF_SERVER\TermProjectServer\include\Util\Timer.cpp">
-      <Filter>05.Util\03.Timer</Filter>
-    </ClCompile>
     <ClCompile Include="include\Processor\NPCProcessor.cpp">
       <Filter>03.Processor\02.NPCProcessor</Filter>
     </ClCompile>
@@ -92,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="include\Util\MiniDump.cpp">
       <Filter>05.Util\04.Error</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Util\Timer.cpp">
+      <Filter>05.Util\03.Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,9 +143,6 @@
     <ClInclude Include="include\Util\Astar.h">
       <Filter>05.Util\02.Astar</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\juicy%27\Desktop\SenierProject (2)\TF_SERVER\TermProjectServer\include\Util\Timer.h">
-      <Filter>05.Util\03.Timer</Filter>
-    </ClInclude>
     <ClInclude Include="include\Object\Object.h">
       <Filter>02.Object</Filter>
     </ClInclude>
@@ -157,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\juicy%27\Desktop\SenierProject (2)\TF_SERVER\TermProjectServer\include\Util\VectorData.h">
       <Filter>05.Util\01.Data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\Timer.h">
+      <Filter>05.Util\03.Timer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -105,7 +105,7 @@ void DayForestScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera
 	for (auto& i : m_vMonsters)     i->Render(pd3dCommandList, m_pCamera);
 
 	if (m_pMap) m_pMap->Render(pd3dCommandList, m_pCamera);
-
+	if (pShader) pShader->Render(pd3dCommandList, m_pCamera);
 	m_UiShader->Render(pd3dCommandList, m_pCamera);
 }
 
@@ -160,59 +160,63 @@ void DayForestScene::BuildLightsAndMaterials()
 void DayForestScene::CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	int index = 0;
-	for (int y = 0; y < MAPSIZE; ++y) {
-		for (int x = 0; x < MAPSIZE; ++x) {
+	for (int y = 0; y < 1; ++y) {
+		for (int x = 0; x < 1; ++x) {
 			switch (CMapData::GET_SINGLE()->Stage1[y][x])
 			{
 			case READ_DATA::TREE: {
-				CTree* i_Tree = new CTree();
 				INSTANCEOB tempOB = FindStaticObProtoType("Tree");
-				i_Tree->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB.Mesh);
-				i_Tree->SetWPosition(x*30.f, 0, y*-30);
-				m_StaticObjects.push_back(i_Tree);
-
-				CTreeShadow* ctree = new CTreeShadow();
-				ctree->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB.Mesh);
-				ctree->SetWPosition(x*30.f, 0, y*-30);
-				ctree->shadowUpdate = true;
-				m_StaticShadows.push_back(ctree);
+				pShader = new CInstancingShader;
+				pShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
+				pShader->Initialize(pd3dDevice, pd3dCommandList, tempOB.Mesh);
+				
+				//CTree* i_Tree = new CTree();
+				//i_Tree->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB.Mesh);
+				//i_Tree->SetWPosition(x*30.f, 0, y*-30);
+				//m_StaticObjects.push_back(i_Tree);
+				//
+				//CTreeShadow* ctree = new CTreeShadow();
+				//ctree->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB.Mesh);
+				//ctree->SetWPosition(x*30.f, 0, y*-30);
+				//ctree->shadowUpdate = true;
+				//m_StaticShadows.push_back(ctree);
 
 				break;
 			}
 
 			case READ_DATA::SMON: {
-				for (int i = 0; i < 3; ++i) {
-					CStoneMon* i_Monster = new CStoneMon();
-					i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-					m_vMonsters.push_back(i_Monster);
-					m_vMonsters[index++]->SetActive(true);
-				}
+				//for (int i = 0; i < 3; ++i) {
+				//	CStoneMon* i_Monster = new CStoneMon();
+				//	i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+				//	m_vMonsters.push_back(i_Monster);
+				//	m_vMonsters[index++]->SetActive(true);
+				//}
 				break;
 			}
 
 			case READ_DATA::BMON: {
-				for (int i = 0; i < 3; ++i) {
-					CBeatleMon* i_Monster = new CBeatleMon();
-					i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-					m_vMonsters.push_back(i_Monster);
-					m_vMonsters[index++]->SetActive(true);
-				}
+				//for (int i = 0; i < 3; ++i) {
+				//	CBeatleMon* i_Monster = new CBeatleMon();
+				//	i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+				//	m_vMonsters.push_back(i_Monster);
+				//	m_vMonsters[index++]->SetActive(true);
+				//}
 				break;
 			}
 
 			case READ_DATA::SMONBOSS: {
-				CStoneBOSS* i_Monster = new CStoneBOSS();
-				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-				m_vMonsters.push_back(i_Monster);
-				m_vMonsters[index++]->SetActive(true);
+				//CStoneBOSS* i_Monster = new CStoneBOSS();
+				//i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+				//m_vMonsters.push_back(i_Monster);
+				//m_vMonsters[index++]->SetActive(true);
 				break;
 			}
 
 			case READ_DATA::BMONBOSS: {
-				CBeatleBOSS* i_Monster = new CBeatleBOSS();
-				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-				m_vMonsters.push_back(i_Monster);
-				m_vMonsters[index++]->SetActive(true);
+				//CBeatleBOSS* i_Monster = new CBeatleBOSS();
+				//i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+				//m_vMonsters.push_back(i_Monster);
+				//m_vMonsters[index++]->SetActive(true);
 				break;
 			}
 

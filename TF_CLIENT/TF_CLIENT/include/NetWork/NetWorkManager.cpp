@@ -28,7 +28,8 @@ bool CNetWorkManager::Initialize()
 	//cout << "IP를 입력해 주세요!(LoopBack Address == -1)" << endl;
 	//cin >> IP;
 	//if (!strcmp(IP, "-1"))
-		strcpy(IP, "192.168.102.35");
+	//strcpy(IP, "192.168.102.35");
+	strcpy(IP, "127.0.0.1");
 	CreateSocketNEvent(IP);
 	/*ID 입력~*/
 	return true;

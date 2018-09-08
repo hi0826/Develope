@@ -16,7 +16,7 @@ private:
 
 	vector<CMoveObject*>    m_vMonsters;
 
-	
+	CInstancingShader*	pShader;
 
 public:
 	DayForestScene();
