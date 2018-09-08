@@ -1,7 +1,3 @@
-struct INSTANCEDGAMEOBJECTINFO
-{
-	matrix		m_mtxGameObject;
-};
 
 cbuffer cbPlayerInfo : register(b0)
 {
@@ -102,8 +98,6 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET
 	return(cColor);
 }
 
-#define _WITH_VERTEX_LIGHTING
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 struct VS_LIGHTING_INPUT
@@ -194,58 +188,28 @@ Texture2D gtxtTerrainBaseTexture : register(t1);
 Texture2D gtxtTerrainDetailTexture : register(t2);
 Texture2D TreeTexture : register(t3);
 
-struct VS_TERRAIN_INPUT
-{
-	float3 position : POSITION;
-	float4 color : COLOR; //지형의 기본 색
-	float2 uv0 : TEXCOORD0; // 베이스 텍스쳐
-	float2 uv1 : TEXCOORD1; // 디테일 텍스쳐
-};
-
-struct VS_TERRAIN_OUTPUT
-{
-	float4 position : SV_POSITION;
-	float4 color : COLOR;
-	float2 uv0 : TEXCOORD0;
-	float2 uv1 : TEXCOORD1;
-};
-
-VS_TERRAIN_OUTPUT VSTerrain(VS_TERRAIN_INPUT input)
-{
-	VS_TERRAIN_OUTPUT output;
-
-#ifdef _WITH_CONSTANT_BUFFER_SYNTAX
-	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);
-#else
-	output.position = mul(mul(mul(float4(input.position, 1.0f), gmtxGameObject), gmtxView), gmtxProjection);// 월드, 카메라, 투영 변환
-#endif
-	output.color = input.color;
-	output.uv0 = input.uv0;
-	output.uv1 = input.uv1;
-
-	return(output);
-}
-
-float4 PSTerrain(VS_TERRAIN_OUTPUT input) : SV_TARGET
-{
-	float4 cBaseTexColor = gtxtTerrainBaseTexture.Sample(gSamplerState, input.uv0);
-	float4 cDetailTexColor = gtxtTerrainDetailTexture.Sample(gSamplerState, input.uv1);
-	float4 cColor = input.color * saturate((cBaseTexColor * 0.5f) + (cDetailTexColor * 0.5f));//input.color는 기본 색상(디퓨즈 색상)
-	clip(cDetailTexColor.a - 0.1f);
-	return(cColor);
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //
+struct INSTANCEDGAMEOBJECTINFO
+{
+	matrix		m_mtxGameObject;
+	uint		gnMaterial;
+};
+
+
 StructuredBuffer<INSTANCEDGAMEOBJECTINFO> gGameObjectInfos : register(t4);
+
 struct VS_INSTANCING_INPUT
 {
 	float3 position : POSITION;
+	float3 normal : NORMAL;
 	float2 uv : TEXCOORD;
 };
 struct VS_INSTANCING_OUTPUT
 {
 	float4 position : SV_POSITION;
+	float3 positionW : POSITION;
+	float3 normalW : NORMAL;
 	float2 uv : TEXCOORD;
 };
 
@@ -253,33 +217,24 @@ VS_INSTANCING_OUTPUT VSInstancing(VS_INSTANCING_INPUT input, uint nInstanceID : 
 {
 	VS_INSTANCING_OUTPUT output;
 
-#ifdef _WITH_CONSTANT_BUFFER_SYNTAX
-	output.position = mul(mul(mul(float4(input.position, 1.0f), gGameObjectInfos[nInstanceID].m_mtxGameObject), gmtxView), gmtxProjection);
-#else
-	output.position = mul(mul(mul(float4(input.position, 1.0f), gGameObjectInfos[nInstanceID].m_mtxGameObject), gmtxView), gmtxProjection);
-#endif
-	output.uv = input.uv;
+	//output.position = mul(mul(mul(float4(input.position, 1.0f), gGameObjectInfos[nInstanceID].m_mtxGameObject), gmtxView), gmtxProjection);
+	output.normalW = mul(input.normal, (float3x3)gGameObjectInfos[nInstanceID].m_mtxGameObject);
+	output.positionW = (float3)mul(float4(input.position, 1.0f), gGameObjectInfos[nInstanceID].m_mtxGameObject);
+	output.position = mul(mul(float4(output.positionW, 1.0), gmtxView), gmtxProjection);
 
+	output.uv = input.uv;
+	
 	return(output);
 }
 float4 PSInstancing(VS_INSTANCING_OUTPUT input) : SV_TARGET
 {
 	float4 cColor = TreeTexture.Sample(gSamplerState, input.uv);
 
+	input.normalW = normalize(input.normalW);
 	clip(cColor.a - 0.1f);
+	float4 cIllumination = Lighting(input.positionW, input.normalW);
 
-	return(cColor);
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-Texture2D gtxtSkyBox : register(t5); // 텍스쳐 큐브의 형태로 연결한다.
-
-float4 PSSkyBox(VS_TEXTURED_OUTPUT input) : SV_TARGET
-{
-	float4 cColor = gtxtSkyBox.Sample(gClampSamplerState, input.uv);
-
-	return(cColor);
+	return(lerp(cColor, cIllumination, 0.5f));
 }
 
 //============================================================================

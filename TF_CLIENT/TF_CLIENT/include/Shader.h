@@ -6,6 +6,8 @@
 #include "Object.h"
 #include "Camera.h"
 #include "Player.h"
+#include "StaticObj.h"
+#include "CMapData.h"
 
 class CShader 
 {
@@ -189,5 +191,12 @@ public:
 	virtual void                    UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void                    ReleaseShaderVariables();
 	virtual void                    BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pContext = NULL);
-	virtual void                    Render(ID3D12GraphicsCommandList *pd3dCommandList);
+	void							Initialize(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, CMesh *pMesh);
+	virtual void                    Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera = NULL);
+
+protected: 
+	//인스턴스 데이터를 포함하는 버퍼와 포인터이다. 
+	//ID3D12Resource *m_pd3dcbGameObjects = NULL;
+	CB_INSTANCE_INFO *cbMappedGameObjects = NULL;
+	vector<CGameObject*> m_GameObjects;
 };
