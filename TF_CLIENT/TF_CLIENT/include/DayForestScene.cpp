@@ -37,6 +37,8 @@ bool DayForestScene::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 {
 	CScene::Initialize(pd3dDevice, pd3dCommandList);
 	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Static/Tree/Trees3x3.MD5MESH", "Tree");
+	CreateMovableObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Movable/Monster/Stone/StoneMonMesh.md5mesh", "StoneMon", READ_DATA::SMON);
+	CreateMovableObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Movable/Monster/Beatle/BeetleMonMesh.md5mesh", "BeatleMon", READ_DATA::BMON);
 
 	if (m_pPlayerVector.size() == 0) {
 		for (int i = 0; i < MAX_USER; ++i) {
@@ -99,13 +101,11 @@ void DayForestScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera
 
 	for (auto& i : m_pPlayerVector) i->Render(pd3dCommandList, m_pCamera);
 
-	for (auto& i : m_StaticObjects) i->Render(pd3dCommandList, m_pCamera);
-	for (auto& i : m_StaticShadows) i->RenderShadow(pd3dCommandList, m_pCamera);
-
 	for (auto& i : m_vMonsters)     i->Render(pd3dCommandList, m_pCamera);
 
+	for (auto& i : m_StaticShader)	i->Render(pd3dCommandList, m_pCamera);
 	if (m_pMap) m_pMap->Render(pd3dCommandList, m_pCamera);
-	if (pShader) pShader->Render(pd3dCommandList, m_pCamera);
+
 	m_UiShader->Render(pd3dCommandList, m_pCamera);
 }
 
@@ -160,63 +160,61 @@ void DayForestScene::BuildLightsAndMaterials()
 void DayForestScene::CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	int index = 0;
-	for (int y = 0; y < 1; ++y) {
-		for (int x = 0; x < 1; ++x) {
+	INSTANCEOB tempOB = FindStaticObProtoType("Tree");
+	// Tree
+	CInstancingShader* tempShader = new CInstancingShader();
+	tempShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
+	tempShader->Initialize(pd3dDevice, pd3dCommandList, tempOB.Mesh);
+	m_StaticShader.push_back(tempShader);
+	// Tree Shadow
+	CInstancingShader* tempShadow = new CInstancingShader();
+	tempShadow->CreateShadowShader(pd3dDevice, m_pd3dGraphicsRootSignature);
+	tempShadow->InitializeShadow(pd3dDevice, pd3dCommandList, tempOB.Mesh);
+	m_StaticShader.push_back(tempShadow);
+
+	for (int y = 0; y < MAPSIZE; ++y) {
+		for (int x = 0; x < MAPSIZE; ++x) {
 			switch (CMapData::GET_SINGLE()->Stage1[y][x])
 			{
-			case READ_DATA::TREE: {
-				INSTANCEOB tempOB = FindStaticObProtoType("Tree");
-				pShader = new CInstancingShader;
-				pShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
-				pShader->Initialize(pd3dDevice, pd3dCommandList, tempOB.Mesh);
-				
-				//CTree* i_Tree = new CTree();
-				//i_Tree->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB.Mesh);
-				//i_Tree->SetWPosition(x*30.f, 0, y*-30);
-				//m_StaticObjects.push_back(i_Tree);
-				//
-				//CTreeShadow* ctree = new CTreeShadow();
-				//ctree->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, tempOB.Mesh);
-				//ctree->SetWPosition(x*30.f, 0, y*-30);
-				//ctree->shadowUpdate = true;
-				//m_StaticShadows.push_back(ctree);
-
-				break;
-			}
-
 			case READ_DATA::SMON: {
-				//for (int i = 0; i < 3; ++i) {
-				//	CStoneMon* i_Monster = new CStoneMon();
-				//	i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-				//	m_vMonsters.push_back(i_Monster);
-				//	m_vMonsters[index++]->SetActive(true);
-				//}
+				for (int i = 0; i < 3; ++i) {
+					//tempOB = FindStaticObProtoType("StoneMon");
+					CStoneMon* i_Monster = new CStoneMon();
+					i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+					i_Monster->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
+					m_vMonsters.push_back(i_Monster);
+					m_vMonsters[index++]->SetActive(true);
+				}
 				break;
 			}
 
 			case READ_DATA::BMON: {
-				//for (int i = 0; i < 3; ++i) {
-				//	CBeatleMon* i_Monster = new CBeatleMon();
-				//	i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-				//	m_vMonsters.push_back(i_Monster);
-				//	m_vMonsters[index++]->SetActive(true);
-				//}
+				for (int i = 0; i < 3; ++i) {
+					//tempOB = FindStaticObProtoType("BeatleMon");
+					CBeatleMon* i_Monster = new CBeatleMon();
+					i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+					i_Monster->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
+					m_vMonsters.push_back(i_Monster);
+					m_vMonsters[index++]->SetActive(true);
+				}
 				break;
 			}
 
 			case READ_DATA::SMONBOSS: {
-				//CStoneBOSS* i_Monster = new CStoneBOSS();
-				//i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-				//m_vMonsters.push_back(i_Monster);
-				//m_vMonsters[index++]->SetActive(true);
+				CStoneBOSS* i_Monster = new CStoneBOSS();
+				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+				i_Monster->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
+				m_vMonsters.push_back(i_Monster);
+				m_vMonsters[index++]->SetActive(true);
 				break;
 			}
 
 			case READ_DATA::BMONBOSS: {
-				//CBeatleBOSS* i_Monster = new CBeatleBOSS();
-				//i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
-				//m_vMonsters.push_back(i_Monster);
-				//m_vMonsters[index++]->SetActive(true);
+				CBeatleBOSS* i_Monster = new CBeatleBOSS();
+				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
+				i_Monster->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
+				m_vMonsters.push_back(i_Monster);
+				m_vMonsters[index++]->SetActive(true);
 				break;
 			}
 
@@ -234,6 +232,31 @@ void DayForestScene::CreateStaticObProtoType(ID3D12Device *pd3dDevice, ID3D12Gra
 	std::vector<std::wstring> texFileNameArray1;
 	INSTANCEOB  TempOBJ;
 	LoadIlluminatedMD5Model(pd3dDevice, pd3dCommandList, TempOBJ.Mesh, filePath, TempOBJ.Model, shaderResourceViewArray1, texFileNameArray1, 0.3, 0.3, 0.3);
+	m_mProtoType.insert(std::make_pair(strTag, TempOBJ));
+}
+
+void DayForestScene::CreateMovableObProtoType(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, const std::wstring filePath, const std::string strTag, READ_DATA type)
+{
+	std::vector<ID3D12Resource*> shaderResourceViewArray1;
+	std::vector<std::wstring> texFileNameArray1;
+	INSTANCEOB  TempOBJ;
+	LoadMD5Model(pd3dDevice, pd3dCommandList, TempOBJ.Mesh, filePath, TempOBJ.Model, shaderResourceViewArray1, texFileNameArray1, 0.3, 0.3, 0.3);
+	switch (type) {
+	case READ_DATA::SMON :
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Stone/StonemonIdle.md5anim", TempOBJ.Model);
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Stone/StonemonWalk.md5anim", TempOBJ.Model);
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Stone/StoneMonAttack.md5anim", TempOBJ.Model);
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Stone/StoneMonDamaged.md5anim", TempOBJ.Model);
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Stone/StoneMonDead.md5anim", TempOBJ.Model);
+		break;
+	case READ_DATA::BMON :
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Beatle/BeetleMonIdle.md5anim", TempOBJ.Model);
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Beatle/BeetleMonWalk.md5anim", TempOBJ.Model);
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Beatle/BeetleMonAttack.md5anim", TempOBJ.Model);
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Beatle/BeetleMonDamaged.md5anim", TempOBJ.Model);
+		LoadMD5Anim(L"Assets/Model/Movable/Monster/Beatle/BeetleMonDead.md5anim", TempOBJ.Model);
+		break;
+	}
 	m_mProtoType.insert(std::make_pair(strTag, TempOBJ));
 }
 

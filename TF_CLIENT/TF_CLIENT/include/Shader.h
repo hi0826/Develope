@@ -187,11 +187,13 @@ public:
 	virtual D3D12_SHADER_BYTECODE   CreateVertexShader(ID3DBlob **ppd3dShaderBlob);
 	virtual D3D12_SHADER_BYTECODE   CreatePixelShader(ID3DBlob **ppd3dShaderBlob);
 	virtual void                    CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignature *pd3dGraphicsRootSignature);
+	virtual void					CreateShadowShader(ID3D12Device *pd3dDevice, ID3D12RootSignature *pd3dGraphicsRootSignature);
 	virtual void                    CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void                    UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
 	virtual void                    ReleaseShaderVariables();
 	virtual void                    BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, void *pContext = NULL);
 	void							Initialize(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, CMesh *pMesh);
+	void							InitializeShadow(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, CMesh *pMesh);
 	virtual void                    Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera = NULL);
 
 protected: 

@@ -17,6 +17,7 @@ private:
 	vector<CMoveObject*>    m_vMonsters;
 
 	CInstancingShader*	pShader;
+	vector<CInstancingShader*> m_StaticShader;
 
 public:
 	DayForestScene();
@@ -38,6 +39,7 @@ public:
 	void BuildLightsAndMaterials();
 	void CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList);
 	void CreateStaticObProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::wstring filePath, const std::string strTag);
+	void CreateMovableObProtoType(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const std::wstring filePath, const std::string strTag, READ_DATA type);
 	INSTANCEOB FindStaticObProtoType(const std::string& strKey);
 	void CollisionCheck(float fDeltaTime);
 	void CollisionMove(BYTE dir, float fDeltaTime);

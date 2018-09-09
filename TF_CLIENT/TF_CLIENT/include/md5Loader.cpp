@@ -1085,6 +1085,7 @@ bool LoadMD5Anim(std::wstring filename, Model3D& MD5Model)
 	return true;
 }
 
+
 int UpdateMD5Model(CMesh*& p_Mesh, Model3D& MD5Model, float deltaTime, int animation)
 {
 	MD5Model.animations[animation].currAnimTime += deltaTime; // Update the current animation time

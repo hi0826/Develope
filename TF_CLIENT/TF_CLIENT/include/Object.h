@@ -20,6 +20,7 @@ struct INSTANCEOB
 {
 	CMesh* Mesh;
 	Model3D Model;
+	std::vector<ModelAnimation> animations;
 };
 
 struct CB_GAMEOBJECT_INFO
@@ -158,7 +159,7 @@ public: //Set
 	void  SetMesh(int nIndex, CMesh *pMesh)       { if (m_ppMeshes) m_ppMeshes[nIndex] = pMesh; };
 	void  SetMaterial(CMaterial *pMaterial)       { if (!m_pMaterial) m_pMaterial = pMaterial; }
 	void  SetShader(CShader *pShader);
-	
+	void  SetWMatrix(XMFLOAT4X4 float4x4)		  { m_xmf4x4World = float4x4; }
 
 	void  SetCbvGPUDescriptorHandle(D3D12_GPU_DESCRIPTOR_HANDLE d3dCbvGPUDescriptorHandle) 	{m_d3dCbvGPUDescriptorHandle = d3dCbvGPUDescriptorHandle;}
 	void  SetCbvGPUDescriptorHandlePtr(UINT64 nCbvGPUDescriptorHandlePtr) { m_d3dCbvGPUDescriptorHandle.ptr = nCbvGPUDescriptorHandlePtr; }
