@@ -824,6 +824,14 @@ void CInstancingShader::CreateShader(ID3D12Device *pd3dDevice, ID3D12RootSignatu
 	CShader::CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
 }
 
+void CInstancingShader::CreateShadowShader(ID3D12Device * pd3dDevice, ID3D12RootSignature * pd3dGraphicsRootSignature)
+{
+	m_nPipelineStates = 1;
+	m_ppd3dPipelineStates = new ID3D12PipelineState*[m_nPipelineStates];
+
+	CShader::CreateShadowShader(pd3dDevice, pd3dGraphicsRootSignature);
+}
+
 void CInstancingShader::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	//인스턴스 정보를 저장할 정점 버퍼를 업로드 힙 유형으로 생성한다. 
@@ -888,7 +896,7 @@ void CInstancingShader::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCom
 void CInstancingShader::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, CMesh *pMesh)
 {
 	m_nObjects = 400;
-	
+
 	CTexture *tex = new CTexture(1, RESOURCE_TEXTURE2D, 0);
 	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/Static/Tree/Trees3x3Map.dds"), 0);
 
@@ -910,6 +918,50 @@ void CInstancingShader::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsComm
 				tempObj = new CTree();
 				tempObj->SetWPosition(30 * x, 0, -30 * y);
 				tempObj->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize *i));
+				m_GameObjects.push_back(tempObj);
+				++i;
+			}
+			//}
+		}
+
+	}
+	if (m_GameObjects.size() > 0) {
+		m_GameObjects[0]->SetMaterial(m_pMaterial);
+		m_GameObjects[0]->SetMesh(0, pMesh);
+	}
+}
+void CInstancingShader::InitializeShadow(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, CMesh * pMesh)
+{
+	m_nObjects = 400;
+
+	XMVECTOR shadowPlane = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); // xz평면
+	XMVECTOR toMainLight = -XMLoadFloat3(new XMFLOAT3(-0.5f, -1.0f, 0.0f));
+	XMMATRIX S = XMMatrixShadow(shadowPlane, toMainLight);
+	XMMATRIX shadowOffSetY = XMMatrixTranslation(0.0f, 0.001f, 0.0f);
+
+	CTexture *tex = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	tex->LoadTextureFromFile(pd3dDevice, pd3dCommandList, _T("Assets/Model/Static/Tree/Trees3x3Map.dds"), 0);
+
+	UINT ncbElementBytes = ((sizeof(CB_INSTANCE_INFO) + 255) & ~255);
+
+	CreateCbvAndSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, m_nObjects, 1);
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	CreateShaderResourceViews(pd3dDevice, pd3dCommandList, tex, 8, true);
+
+	m_pMaterial = new CMaterial();
+	m_pMaterial->SetTexture(tex);
+
+	CGameObject* tempObj = NULL;
+	int i = 0;
+	for (int y = 0; y < MAPSIZE; ++y) {
+		for (int x = 0; x < MAPSIZE; ++x) {
+			//for (int i = 0; i < m_GameObjects.capacity(); ++i) {
+			if (CMapData::GET_SINGLE()->Stage1[y][x] == READ_DATA::TREE) {
+				tempObj = new CTree();
+				tempObj->SetWPosition(30 * x, 0, -30 * y);
+				tempObj->SetCbvGPUDescriptorHandlePtr(m_d3dCbvGPUDescriptorStartHandle.ptr + (::gnCbvSrvDescriptorIncrementSize *i));
+				XMFLOAT4X4 TempShadow = tempObj->GetWMatrix();
+				tempObj->SetWMatrix(Matrix4x4::Multiply(TempShadow, S*shadowOffSetY));
 				m_GameObjects.push_back(tempObj);
 				++i;
 			}

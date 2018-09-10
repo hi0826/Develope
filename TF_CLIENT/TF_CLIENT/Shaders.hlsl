@@ -179,7 +179,7 @@ float4 PSTexturedLighting(VS_TEXTURED_LIGHTING_OUTPUT input) : SV_TARGET
 	input.normalW = normalize(input.normalW);
 	float4 cIllumination = Lighting(input.positionW, input.normalW);
 
-	return(lerp(cColor, cIllumination, 0.5f));
+	return(lerp(cColor, cIllumination, 0.0f));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,12 +244,13 @@ struct VS_SHADOW_OUTPUT
 	float4 position : SV_POSITION;
 };
 
-VS_SHADOW_OUTPUT VSShadow(VS_TEXTURED_LIGHTING_INPUT input)
+VS_SHADOW_OUTPUT VSShadow(VS_INSTANCING_INPUT input, uint nInstanceID : SV_InstanceID)
 {
 	VS_SHADOW_OUTPUT output = (VS_SHADOW_OUTPUT)0;
 
+	
 	float4 mxf4position = float4(input.position, 1.0f);
-	matrix mxf4transform = mul(mul(gmtxGameObject, gmtxView), gmtxProjection);
+	matrix mxf4transform = mul(mul(gGameObjectInfos[nInstanceID].m_mtxGameObject, gmtxView), gmtxProjection);
 
 	output.position = mul(mxf4position, mxf4transform);
 
