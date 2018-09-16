@@ -95,6 +95,7 @@ float4 PSTextured(VS_TEXTURED_OUTPUT input) : SV_TARGET
 {
 	float4 cColor = gtxtTexture.Sample(gSamplerState, input.uv);
 
+	clip(cColor.a - 0.9f);
 	return(cColor);
 }
 

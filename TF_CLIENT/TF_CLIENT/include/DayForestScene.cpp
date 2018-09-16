@@ -36,7 +36,9 @@ DayForestScene::~DayForestScene()
 bool DayForestScene::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList)
 {
 	CScene::Initialize(pd3dDevice, pd3dCommandList);
+
 	CreateStaticObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Static/Tree/Trees3x3.MD5MESH", "Tree");
+	
 	CreateMovableObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Movable/Monster/Stone/StoneMonMesh.md5mesh", "StoneMon", READ_DATA::SMON);
 	CreateMovableObProtoType(pd3dDevice, pd3dCommandList, L"Assets/Model/Movable/Monster/Beatle/BeetleMonMesh.md5mesh", "BeatleMon", READ_DATA::BMON);
 
@@ -49,6 +51,10 @@ bool DayForestScene::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommand
 		}
 	}
 	CreateStaticObjectFromMapFile(pd3dDevice, pd3dCommandList);
+
+	
+
+
 	m_pMap = new CPlaneMap(MAPSIZE, MAPSIZE);
 	m_pMap->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 
@@ -80,8 +86,12 @@ void DayForestScene::Update(float fDeltaTime)
 {
 	
 	CollisionCheck(fDeltaTime);
+
 	for (auto& i : m_pPlayerVector) i->Update(fDeltaTime);
 	for (auto& i : m_vMonsters)  i->Update(fDeltaTime);
+	for (int i = 0; i < m_vMonShadows.size(); ++i) {
+		m_vMonShadows[i]->Update(fDeltaTime, m_vMonsters[i]->GetWPosition(), m_vMonsters[i]->GetActive());
+	}
 	m_pCamera->Update(fDeltaTime);
 	m_pCamera->RegenerateViewMatrix();
 }
@@ -104,6 +114,9 @@ void DayForestScene::Render(ID3D12GraphicsCommandList * pd3dCommandList, CCamera
 	for (auto& i : m_vMonsters)     i->Render(pd3dCommandList, m_pCamera);
 
 	for (auto& i : m_StaticShader)	i->Render(pd3dCommandList, m_pCamera);
+	
+	for (auto& i : m_vMonShadows) i->Render(pd3dCommandList, m_pCamera);
+
 	if (m_pMap) m_pMap->Render(pd3dCommandList, m_pCamera);
 
 	m_UiShader->Render(pd3dCommandList, m_pCamera);
@@ -184,10 +197,15 @@ void DayForestScene::CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3
 					i_Monster->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
 					m_vMonsters.push_back(i_Monster);
 					m_vMonsters[index++]->SetActive(true);
+
+					Mon_Shadow* temp = new Mon_Shadow();
+					temp->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(0, 0, 0));
+					temp->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
+					m_vMonShadows.push_back(temp);
 				}
 				break;
 			}
-
+	
 			case READ_DATA::BMON: {
 				for (int i = 0; i < 3; ++i) {
 					//tempOB = FindStaticObProtoType("BeatleMon");
@@ -196,29 +214,42 @@ void DayForestScene::CreateStaticObjectFromMapFile(ID3D12Device *pd3dDevice, ID3
 					i_Monster->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
 					m_vMonsters.push_back(i_Monster);
 					m_vMonsters[index++]->SetActive(true);
+
+					Mon_Shadow* temp = new Mon_Shadow();
+					temp->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(0, 0, 0));
+					temp->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
+					m_vMonShadows.push_back(temp);
 				}
 				break;
 			}
-
+	
 			case READ_DATA::SMONBOSS: {
 				CStoneBOSS* i_Monster = new CStoneBOSS();
 				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 				i_Monster->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
 				m_vMonsters.push_back(i_Monster);
 				m_vMonsters[index++]->SetActive(true);
+
+				Mon_Shadow* temp = new Mon_Shadow();
+				temp->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(0, 0, 0));
+				temp->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
+				m_vMonShadows.push_back(temp);
 				break;
 			}
-
+	
 			case READ_DATA::BMONBOSS: {
 				CBeatleBOSS* i_Monster = new CBeatleBOSS();
 				i_Monster->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 				i_Monster->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
 				m_vMonsters.push_back(i_Monster);
 				m_vMonsters[index++]->SetActive(true);
+
+				Mon_Shadow* temp = new Mon_Shadow();
+				temp->Initialize(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature, XMFLOAT3(0, 0, 0));
+				temp->SetWPosition(x * 30.0f, 0.0f, y* -30.0f);
+				m_vMonShadows.push_back(temp);
 				break;
 			}
-
-
 			default:
 				break;
 			}
