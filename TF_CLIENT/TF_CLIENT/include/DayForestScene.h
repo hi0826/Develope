@@ -15,6 +15,7 @@ private:
 	vector<CStaticObj*>		m_StaticShadows;
 
 	vector<CMoveObject*>    m_vMonsters;
+	vector<Mon_Shadow*>		m_vMonShadows;
 
 	CInstancingShader*	pShader;
 	vector<CInstancingShader*> m_StaticShader;

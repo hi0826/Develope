@@ -260,3 +260,39 @@ void CBeatleBOSS::Update(float fDeltaTime)
 	if (m_AnimState == MOVESTATE) { Rotate(m_Direction); CMoveObject::Move(Vector3::ScalarProduct(GetLook(), fDeltaTime * 7)); }
 	m_OOBB.Center = GetWPosition();
 }
+
+bool Mon_Shadow::Initialize(ID3D12Device * pd3dDevice, ID3D12GraphicsCommandList * pd3dCommandList, ID3D12RootSignature * pd3dGraphicsRootSignature, XMFLOAT3 position)
+{
+	CTexturedRectMesh *pRectMesh = NULL;
+	pRectMesh = new CTexturedRectMesh(pd3dDevice, pd3dCommandList, 3.0, 0.0, 2.0, position.x, 0.001, position.z);
+	SetMesh(0, pRectMesh);
+
+	CreateShaderVariables(pd3dDevice, pd3dCommandList);
+
+	CTexture *pTerrainTexture = new CTexture(1, RESOURCE_TEXTURE2D, 0);
+	pTerrainTexture->LoadTextureFromFile(pd3dDevice, pd3dCommandList, L"Assets/Image/Shadow1.dds", 0);
+
+	UINT ncbElementBytes = ((sizeof(CB_GAMEOBJECT_INFO) + 255) & ~255); //256ÀÇ ¹è¼ö
+
+	CTexturedShader* pTexturedShader = new CTexturedShader();
+	pTexturedShader->CreateShader(pd3dDevice, pd3dGraphicsRootSignature);
+	pTexturedShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
+	pTexturedShader->CreateCbvAndSrvDescriptorHeaps(pd3dDevice, pd3dCommandList, 1, 2);
+	pTexturedShader->CreateConstantBufferViews(pd3dDevice, pd3dCommandList, 1, m_pd3dcbGameObject, ncbElementBytes);
+	pTexturedShader->CreateShaderResourceViews(pd3dDevice, pd3dCommandList, pTerrainTexture, 5, true);
+
+	CMaterial *pTerrainMaterial = new CMaterial();
+	pTerrainMaterial->SetTexture(pTerrainTexture);
+	SetMaterial(pTerrainMaterial);
+
+	SetCbvGPUDescriptorHandle(pTexturedShader->GetGPUCbvDescriptorStartHandle());
+	SetShader(pTexturedShader);
+
+	return true;
+}
+
+void Mon_Shadow::Update(float fDeltaTime, XMFLOAT3 position, bool active)
+{
+	if(active) SetWPosition(position);
+	else	SetActive(false);
+}
